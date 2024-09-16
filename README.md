@@ -6,14 +6,12 @@ This repository is for our final year project from Atlantic Technological Univer
 <table>
   <tr> 
     <td> <img src="https://avatars.githubusercontent.com/u/36414229?v=4" width="150px"/> </td>
-    <td> <img src="https://avatars.githubusercontent.com/u/121559784?v=4" width="150px"/> </td>
     <td> 
       <img src="https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg" width="150px"/> 
     </td>
   </tr>
   <tr>
     <td> <b>Caolán Maguire</b> <br/> <i>Student</i> </td>
-    <td> <b>Kevin McShane</b> <br/> <i>Student</i> </td>
     <td> <b>[Lecturer Name]</b> <br/> <i>Supervisor</i> </td>
   </tr>
 </table>
