@@ -1,0 +1,107 @@
+.sidebar {
+  width: 60px; /* Default collapsed width */
+  height: 100vh;
+  background-color: #333; /* Dark grey background */
+  transition: width 0.3s ease, opacity 0.3s ease; /* Smooth transition when expanding/collapsing */
+  overflow: hidden; /* Hide overflow */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.sidebar.expanded {
+  width: 250px; /* Expanded width */
+}
+
+.sidebar-header {
+  padding: 15px;
+  font-size: 1.25rem;
+  color: #fff; /* White text for header */
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.expanded .sidebar-header {
+  opacity: 1; /* Visible in expanded state */
+}
+
+.sidebar-nav {
+  padding: 0;
+  list-style-type: none; /* Remove bullets from list */
+}
+
+.nav-item {
+  list-style: none;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: #fff; /* White text */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  gap: 10px; /* Space between icon and text */
+}
+
+.nav-link:hover {
+  background-color: #444; /* Slightly darker on hover */
+}
+
+.nav-icon {
+  margin-right: 10px;
+  font-size: 1.25rem;
+  transition: margin-right 0.3s ease;
+}
+
+.nav-link small {
+  display: inline-block; /* Ensure consistent spacing */
+  opacity: 0; /* Hidden initially */
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.expanded .nav-link small {
+  opacity: 1; /* Show text in expanded state */
+}
+
+.sidebar.collapsed .nav-link small {
+  display: none; /* Hide text in collapsed state */
+}
+
+.sidebar.collapsed .nav-icon {
+  margin-right: 0; /* Remove spacing for icons in collapsed state */
+}
+
+.badge {
+  background-color: #007bff;
+}
+
+.sidebar .sidebar-brand,
+.sidebar.expanded .sidebar-brand {
+  color: #fff;
+  font-weight: bold;
+}
+
+.nav-group-items {
+  padding-left: 20px;
+}
+
+/* Hide dropdown icons in collapsed state */
+.sidebar.collapsed .nav-group-items,
+.sidebar.collapsed .nav-title {
+  display: none;
+}
+
+.nav-link button {
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+}
+
+button.nav-link:hover {
+  background-color: #444; /* Match hover style for buttons */
+  cursor: pointer;
+}
+
+.sidebar.collapsed button.nav-link:hover small {
+  display: none; /* Prevent hover text visibility in collapsed mode */
+}
