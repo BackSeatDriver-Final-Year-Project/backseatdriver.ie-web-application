@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/gci/backseatdriver/src  # Change to your actual deployment directory
+            cd ../var/www/gci/backseatdriver/src  # Change to your actual deployment directory
             git pull origin main
             npm install
             npm run build
