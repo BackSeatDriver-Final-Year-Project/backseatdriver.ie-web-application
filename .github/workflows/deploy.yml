@@ -1,23 +1,13 @@
-name: Deploy to Server
+- name: Set up SSH key
+  uses: webfactory/ssh-agent@v0.5.3
+  with:
+    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-on:
-  push:
-    branches:
-      - main  # Adjust if your main branch is named differently
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd ../var/www/gci/backseatdriver/src  # Change to your actual deployment directory
-            git pull origin main
+- name: Deploy Application
+  run: |
+    cd /var/www/gci/backseatdriver/src
+    git pull origin main
+    npm install
+    npm run build
+    pm2 delete backseatdriver || true
+    pm2 serve build 3000 --name "backseatdriver" --spa
