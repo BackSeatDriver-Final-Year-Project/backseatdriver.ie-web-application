@@ -1,13 +1,32 @@
-- name: Set up SSH key
-  uses: webfactory/ssh-agent@v0.5.3
-  with:
-    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+name: Deploy to Server
 
-- name: Deploy Application
-  run: |
-    cd /var/www/gci/backseatdriver/src
-    git pull origin main
-    npm install
-    npm run build
-    pm2 delete backseatdriver || true
-    pm2 serve build 3000 --name "backseatdriver" --spa
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan your-server-ip >> ~/.ssh/known_hosts
+
+    - name: Deploy to Server
+      run: |
+        ssh -i ~/.ssh/id_rsa username@your-server-ip << 'EOF'
+          cd /var/www/gci/backseatdriver/src
+          git pull origin main
+          npm install
+          npm run build
+          pm2 delete backseatdriver || true
+          pm2 serve build 3000 --name "backseatdriver" --spa
+        EOF
