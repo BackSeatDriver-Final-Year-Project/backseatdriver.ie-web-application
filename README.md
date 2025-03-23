@@ -1,3 +1,4 @@
+<!--[![pages-build-deployment](https://github.com/caolanmaguire/emerging_technologies/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main)]-->
 # BackSeatDriver.ie Web Application
 
 BackSeatDriver.ie is a web application designed to enhance driving habits by connecting to a vehicle's OBD-II port. It records driving data, provides advice, and reports on driver behaviors, offering personalized feedback through a user-friendly web portal.
