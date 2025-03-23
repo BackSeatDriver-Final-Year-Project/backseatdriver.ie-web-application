@@ -21,7 +21,3 @@ jobs:
           script: |
             cd ../var/www/gci/backseatdriver/src  # Change to your actual deployment directory
             git pull origin main
-            npm install
-            npm run build
-            pm2 delete backseatdriver || true  # Stops existing process if running
-            pm2 serve build 3000 --name "backseatdriver" --spa
