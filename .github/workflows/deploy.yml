@@ -23,7 +23,7 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -i ~/.ssh/id_rsa root@147.182.249.143 << 'EOF'
-          cd /var/www/gci/backseatdriver/src
+          cd /var/www/gci/backseatdriver
           git pull origin main
           npm install
           npm run build
