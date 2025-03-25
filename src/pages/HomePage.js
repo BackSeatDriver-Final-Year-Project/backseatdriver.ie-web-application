@@ -6,7 +6,7 @@ function HomePage() {
   return (
     <>
       {/* Full-Width Carousel */}
-      <Carousel className="mb-5">
+      {/* <Carousel className="mb-5">
         <Carousel.Item>
           <img
             src="https://via.placeholder.com/1920x600"
@@ -40,11 +40,11 @@ function HomePage() {
             <p>Predict vehicle issues before they lead to costly breakdowns.</p>
           </Carousel.Caption>
         </Carousel.Item>
-      </Carousel>
+      </Carousel> */}
 
       <Container>
         {/* Introduction Section */}
-        <Row className="mb-5">
+        {/* <Row className="mb-5">
           <Col>
             <h1>Welcome to BackSeatDriver</h1>
             <p className="lead">
@@ -53,10 +53,10 @@ function HomePage() {
               and save lives.
             </p>
           </Col>
-        </Row>
+        </Row> */}
 
         {/* Why Telematics Matters */}
-        <Row className="mb-5">
+        {/* <Row className="mb-5">
           <Col md={8}>
             <h2>Why Telematics Matters</h2>
             <p>
@@ -77,10 +77,10 @@ function HomePage() {
               className="img-fluid rounded shadow-sm"
             />
           </Col>
-        </Row>
+        </Row> */}
 
         {/* About Me Section */}
-        <Row className="mb-5">
+        {/* <Row className="mb-5">
           <Col md={4}>
             <img
               src="https://via.placeholder.com/350x350"
@@ -98,26 +98,21 @@ function HomePage() {
               With a background in computing and software development, I’ve applied my expertise to explore how we can make driving safer, more efficient, and more environmentally friendly. This project reflects my dedication to innovation and the potential of technology to make a difference.
             </p>
           </Col>
-        </Row>
+        </Row> */}
 
         {/* Video Section */}
-        <Row className="mb-5">
+        {/* <Row className="mb-5">
           <Col>
             <h2>Telematics in Action</h2>
             <p>
               Watch how telematics transforms driving safety and efficiency in real-world scenarios:
             </p>
-            {/* <ReactPlayer
-              url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-              width="100%"
-              controls
-              className="shadow-sm"
-            /> */}
+
           </Col>
-        </Row>
+        </Row> */}
 
         {/* Call to Action */}
-        <Row className="mb-5">
+        {/* <Row className="mb-5">
           <Col>
             <h2>The Importance of Telematics in Reducing Road Fatalities</h2>
             <p>
@@ -131,7 +126,7 @@ function HomePage() {
               Learn More About BackSeatDriver
             </Button>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </>
   );

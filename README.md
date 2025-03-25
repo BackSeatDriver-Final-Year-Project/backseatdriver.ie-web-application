@@ -1,89 +1,70 @@
-<!--[![pages-build-deployment](https://github.com/caolanmaguire/emerging_technologies/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main)]-->
-# BackSeatDriver.ie Web Application
+# Getting Started with Create React App
 
-BackSeatDriver.ie is a web application designed to enhance driving habits by connecting to a vehicle's OBD-II port. It records driving data, provides advice, and reports on driver behaviors, offering personalized feedback through a user-friendly web portal.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Features
+## Available Scripts
 
-- **Data Recording**: Connects to the vehicle's OBD-II port to capture real-time driving data.
-- **Behavior Analysis**: Evaluates driving habits and identifies areas for improvement.
-- **Personalized Feedback**: Offers tailored advice and reports accessible via the web portal.
+In the project directory, you can run:
 
-## Getting Started
+### `npm start`
 
-### Prerequisites
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-- Node.js (version 14.x or higher)
-- npm (version 6.x or higher)
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-### Installation
+### `npm test`
 
-1. **Clone the Repository**:
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-   ```bash
-   git clone https://github.com/BackSeatDriver-Final-Year-Project/backseatdriver.ie-web-application.git
-   ```
+### `npm run build`
 
-2. **Navigate to the Project Directory**:
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-   ```bash
-   cd backseatdriver.ie-web-application
-   ```
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-3. **Install Dependencies**:
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-   ```bash
-   npm install
-   ```
+### `npm run eject`
 
-### Running the Application
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-1. **Start the Development Server**:
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-   ```bash
-   npm start
-   ```
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-2. **Access the Application**:
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-   Open your browser and navigate to `http://localhost:3000`.
+## Learn More
 
-## Usage
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-- **Sign Up / Log In**: Create an account or log in to access personalized features.
-- **Dashboard**: View summaries of your driving data and receive feedback.
-- **Reports**: Access detailed reports on your driving habits and suggestions for improvement.
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-## Contributing
+### Code Splitting
 
-We welcome contributions! Please follow these steps:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-1. **Fork the Repository**.
-2. **Create a New Branch**:
+### Analyzing the Bundle Size
 
-   ```bash
-   git checkout -b feature/YourFeatureName
-   ```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-3. **Make Your Changes**.
-4. **Commit Your Changes**:
+### Making a Progressive Web App
 
-   ```bash
-   git commit -m 'Add Your Feature'
-   ```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-5. **Push to the Branch**:
+### Advanced Configuration
 
-   ```bash
-   git push origin feature/YourFeatureName
-   ```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-6. **Open a Pull Request**.
+### Deployment
 
-## License
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+### `npm run build` fails to minify
 
-## Acknowledgments
-
-- Special thanks to all contributors and supporters of this project.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

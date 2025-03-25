@@ -1,8 +1,26 @@
+import { useParams, useNavigate } from 'react-router-dom';
 import CalendarHeatmap from 'react-calendar-heatmap';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar';
 import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button } from 'react-bootstrap';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { io } from 'socket.io-client';
+// import Graph from './Graph'; // Import the Graph component
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+
+
+import Speedometer, {
+  Background,
+  Arc,
+  Needle,
+  Progress,
+  Marks,
+  Indicator,
+} from 'react-speedometer';
+
+const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
+
 
 const mapContainerStyle = {
   width: '100%',
@@ -90,85 +108,369 @@ const safetyData = {
   ],
 };
 
-function VehicleProfile({ vehicle }) {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyBaFbI9gXbbJ334P10IRIenzDvBlyVvoqE',
-  });
 
+
+// const TestVehicleProfile = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const token = localStorage.getItem('token');
+//   const [vehicle, setVehicle] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   const fetchVehicle = async () => {
+//     if (!token) {
+//       navigate('/login');
+//       return;
+//     }
+//     try {
+//       const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
+//         method: 'GET',
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           'Content-Type': 'application/json',
+//         },
+//       });
+//       if (response.ok) {
+//         const data = await response.json();
+//         setVehicle(data);
+//       } else {
+//         console.error('Failed to fetch vehicle:', response.status);
+//       }
+//     } catch (error) {
+//       console.error('Error fetching vehicle:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchVehicle();
+//   }, [id, token, navigate]);
+
+//   if (loading) {
+//     return <p>Loading vehicle data...</p>;
+//   }
+//   if (!vehicle) {
+//     return <p>Vehicle not found</p>;
+//   }
+
+//   const position = [vehicle.location_lat, vehicle.location_long];
+
+//   return (
+//     <>
+//       <Row className="mb-4">
+//         <Col>
+//           <div className="bg-white p-4 shadow-sm rounded">
+//             <Row>
+
+//             <Col>
+//                 <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+//                   <h4>Current Location</h4>
+//                   <MapContainer center={position} zoom={13} style={{ width: '100%', height: '100%' }}>
+//                     <TileLayer
+//                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//                     />
+//                     <Marker position={position}>
+//                       <Popup>
+//                         {vehicle.name} is located here.<br/>
+//                         Latitude: {vehicle.location_lat}, Longitude: {vehicle.location_long}
+//                       </Popup>
+//                     </Marker>
+//                   </MapContainer>
+//                 </div>
+//               </Col>
+
+//               <Col>
+//                 <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+//                   <h4>Current Location</h4>
+//                   <MapContainer center={position} zoom={13} style={{ width: '100%', height: '100%' }}>
+//                     <TileLayer
+//                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//                     />
+//                     <Marker position={position}>
+//                       <Popup>
+//                         {vehicle.name} is located here.<br/>
+//                         Latitude: {vehicle.location_lat}, Longitude: {vehicle.location_long}
+//                       </Popup>
+//                     </Marker>
+//                   </MapContainer>
+//                 </div>
+//               </Col>
+//               <Col>
+//                 <h4>{vehicle.name}</h4>
+//                 <i>Last connection : {vehicle.last_login}</i>
+//                 <Table striped bordered hover>
+//                   <tbody>
+//                     <tr>
+//                       <th>Device name</th>
+//                       <td>{vehicle.device_name}</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Vehicle ID</th>
+//                       <td>{vehicle.VID}</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Device charging status</th>
+//                       <td>{vehicle.device_charging_status}</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Fuel Level</th>
+//                       <td>75%</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Battery Health</th>
+//                       <td>Good</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Tire Pressure</th>
+//                       <td>Optimal</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Average Speed</th>
+//                       <td>60 km/h</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Total Trips Logged</th>
+//                       <td>150</td>
+//                     </tr>
+//                     <tr>
+//                       <th>Last Service Date</th>
+//                       <td>2024-10-01</td>
+//                     </tr>
+//                   </tbody>
+//                 </Table>
+//               </Col>
+//             </Row>
+//           </div>
+//         </Col>
+//       </Row>
+//     </>
+//   );
+// };
+
+const JourneyMap = ({ journey }) => {
   return (
-    <>
-      {/* Vehicle Overview */}
-      <Row className="mb-4">
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Vehicle Overview</h4>
-            <Table striped bordered hover>
-              <tbody>
-                <tr>
-                  <th>Make</th>
-                  <td>{vehicle.make}</td>
-                </tr>
-                <tr>
-                  <th>Model</th>
-                  <td>{vehicle.model}</td>
-                </tr>
-                <tr>
-                  <th>Year</th>
-                  <td>{vehicle.year}</td>
-                </tr>
-                <tr>
-                  <th>Fuel Type</th>
-                  <td>{vehicle.fuelType}</td>
-                </tr>
-                <tr>
-                  <th>Mileage</th>
-                  <td>{vehicle.mileage}</td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-        </Col>
-      </Row>
-
-      <CalendarHeatmap
-        startDate={shiftDate(today, -150)}
-        endDate={today}
-        values={randomValues}
-        classForValue={value => {
-          if (!value) {
-            return 'color-empty';
-          }
-          return `color-github-${value.count}`;
-        }}
-        // tooltipDataAttrs={value => {
-        //   return {
-        //     'data-tip': `${value.date.toISOString().slice(0, 10)} has count: ${
-        //       value.count
-        //     }`,
-        //   };
-        // }}
-        showWeekdayLabels={true}
-        onClick={value => alert(`Clicked on value with count: ${value.count}`)}
+    <MapContainer center={journey[0]} zoom={13} style={{ width: '100%', height: '100%' }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {/* Current Location */}
-      <Row>
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-            <h4>Current Location</h4>
-            {isLoaded ? (
-              <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-                <Marker position={center} />
-              </GoogleMap>
-            ) : (
-              <p>Loading map...</p>
-            )}
-          </div>
-        </Col>
-      </Row>
-    </>
+      {/* Draw the journey on the map */}
+      <Polyline positions={journey} color="blue" />
+    </MapContainer>
   );
-}
+};
+
+const VehicleProfile = () => {
+  const { id } = useParams(); // Get vehicle ID from the URL
+  const [vin, setVin] = useState(null);
+  const [obdData, setObdData] = useState(null);
+  const token = localStorage.getItem('token');
+
+  // Example usage with journey data
+  const journeyData = [
+    [53.3498, -6.2603], // Dublin
+    [53.3382, -6.2553], // Nearby location
+    [53.3271, -6.2521], // Another point
+  ];
+
+  useEffect(() => {
+    const fetchVin = async () => {
+      try {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Error fetching VIN: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setVin(data.VID);
+        console.log(`Fetched VIN: ${data.vin}`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchVin();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (vin) {
+      socket.emit('subscribeToVin', vin); // Subscribe using the VIN
+      console.log(`Subscribed to VIN: ${vin}`);
+    }
+
+    socket.on('updateObdData', (data) => {
+      setObdData(data);
+    });
+
+    return () => socket.off('updateObdData');
+  }, [vin]);
+
+  return (
+    <Container>
+
+      {obdData ? (
+        <Row>
+          <Col>
+
+            <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+              <JourneyMap journey={obdData.jounrey} />
+
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={obdData.fuel_usage}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Col>
+          <Col>
+            <Row>
+              <Col>
+                <Speedometer
+                  value={obdData.vehicleSpeed}
+                  fontFamily='squada-one'
+                >
+                  <Background />
+                  <Arc />
+                  <Needle />
+                  <Progress />
+                  <Marks />
+                  <Indicator />
+                </Speedometer>
+              </Col>
+
+              <Col>
+                <Speedometer
+                  value={obdData.engineRPM}
+                  fontFamily='squada-one'
+                >
+                  <Background />
+                  <Arc />
+                  <Needle />
+                  <Progress />
+                  <Marks />
+                  <Indicator />
+                </Speedometer>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM} RPM</Col>
+              <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed} km/h</Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuelLevel}%</Col>
+              <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Mass Air Flow:</strong> {obdData.massAirFlow} g/s</Col>
+              <Col className="col-info"><strong>Intake Air Temp:</strong> {obdData.intakeAirTemp}°C</Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Coolant Temp:</strong> {obdData.coolantTemp}°C</Col>
+              {/* <li><strong>Latitude :</strong> {obdData.latitude}°C</li>
+              <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
+            </Row>
+          </Col>
+        </Row>
+      ) : (
+        <Row>
+          <Col>
+
+            <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+              <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '100%' }}>
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={[37.7749, -122.4194]}>
+                  <Popup>
+                    {/* {vehicle.name} is located here.<br /> */}
+                    Latitude:  37.7749, Longitude: -122.4194
+                  </Popup>
+                </Marker>
+              </MapContainer>
+
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={[{name:0, value:0}]}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Col>
+          <Col>
+            <Row>
+              <Col>
+                <Speedometer
+                  value={0}
+                  fontFamily='squada-one'
+                >
+                  <Background />
+                  <Arc />
+                  <Needle />
+                  <Progress />
+                  <Marks />
+                  <Indicator />
+                </Speedometer>
+              </Col>
+
+              <Col>
+                <Speedometer
+                  value={0}
+                  fontFamily='squada-one'
+                >
+                  <Background />
+                  <Arc />
+                  <Needle />
+                  <Progress />
+                  <Marks />
+                  <Indicator />
+                </Speedometer>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Engine RPM:</strong> 0 RPM</Col>
+              <Col className="col-info"><strong>Vehicle Speed:</strong> 0 km/h</Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Fuel Level:</strong> 0%</Col>
+              <Col className="col-info"><strong>Throttle Position:</strong> 0%</Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
+              <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
+            </Row>
+            <Row>
+              <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
+              {/* <li><strong>Latitude :</strong> {obdData.latitude}°C</li>
+              <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
+            </Row>
+          </Col>
+        </Row>
+      )}
+
+    </Container>
+  );
+};
+
 
 function UsageEfficiency({ usage }) {
   return (
@@ -301,6 +603,8 @@ function Wiki() {
     </>
   );
 }
+
+
 
 function ViewVehicle() {
   const [activeView, setActiveView] = useState('vehicleProfile');
