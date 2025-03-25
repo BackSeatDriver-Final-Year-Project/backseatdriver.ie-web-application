@@ -27,7 +27,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@147.182.249.143 << 'EOF'
           set -e
-          cd ../var/www/gci/backseatdriver
+          cd ../var/www/gci/backseatdriver-root
           git pull origin main
           npm install --force
           npm run build
