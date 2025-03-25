@@ -30,8 +30,7 @@ jobs:
           cd ../var/www/gci/backseatdriver-root
           git pull origin main
           npm install --force
-          npm start
-          # npm run build
-          # pm2 delete backseatdriver || true
-          # pm2 serve build 3000 --name "backseatdriver" --spa
+          npm run build
+          pm2 delete backseatdriver || true
+          pm2 serve build 3000 --name "backseatdriver" --spa
         EOF
