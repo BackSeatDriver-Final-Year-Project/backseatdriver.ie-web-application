@@ -18,12 +18,11 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H 147.182.249.143 >> ~/.ssh/known_hosts
+        ssh-keyscan 147.182.249.143 >> ~/.ssh/known_hosts
 
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@147.182.249.143 << 'EOF'
-          set -e  # Exit immediately if a command fails
+        ssh -i ~/.ssh/id_rsa root@147.182.249.143 << 'EOF'
           cd /var/www/gci/backseatdriver
           git pull origin main
           npm install --force
