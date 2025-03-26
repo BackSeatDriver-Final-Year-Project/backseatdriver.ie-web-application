@@ -1,10 +1,15 @@
 .sidebar {
+  position: fixed;
   width: 60px; /* Default collapsed width */
   height: 100vh;
   background-color: #333; /* Dark grey background */
   transition: width 0.3s ease, opacity 0.3s ease; /* Smooth transition when expanding/collapsing */
   overflow: hidden; /* Hide overflow */
   white-space: nowrap; /* Prevent text wrapping */
+  z-index: 100000;
+  background: linear-gradient(to bottom, #2d0b4a, #4a1c6f); /* Dark purple to slightly lighter purple */
+  color: white; /* Text color */
+  box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.8); /* Heavy black shadow */
 }
 
 .sidebar.expanded {

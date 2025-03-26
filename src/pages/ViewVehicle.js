@@ -83,31 +83,6 @@ const vehicleData = {
   ],
 };
 
-const usageData = {
-  fuelCost: '€500',
-  averageFuelEfficiency: '13 km/L',
-  totalDistance: '5,000 km',
-  ecoDrivingScore: 80,
-  efficiencyTips: [
-    'Avoid unnecessary acceleration.',
-    'Maintain optimal tire pressure.',
-    'Use cruise control on highways.',
-  ],
-};
-
-const safetyData = {
-  incidents: [
-    { date: '2024-10-10', description: 'Harsh Braking Detected', severity: 'Moderate' },
-    { date: '2024-09-22', description: 'Over Speeding Event', severity: 'High' },
-  ],
-  driverRating: 4.5,
-  safetyTips: [
-    'Maintain a safe following distance.',
-    'Avoid distractions while driving.',
-    'Stick to speed limits.',
-  ],
-};
-
 
 
 // const TestVehicleProfile = () => {
@@ -472,7 +447,7 @@ const VehicleProfile = () => {
 };
 
 
-function UsageEfficiency({ usage }) {
+function UsageEfficiency() {//({ usage }) {
   return (
     <>
       <Row className="mb-4">
@@ -483,21 +458,21 @@ function UsageEfficiency({ usage }) {
               <tbody>
                 <tr>
                   <th>Total Fuel Cost</th>
-                  <td>{usage.fuelCost}</td>
+                  {/* <td>{usage.fuelCost}</td> */}
                 </tr>
                 <tr>
                   <th>Average Fuel Efficiency</th>
-                  <td>{usage.averageFuelEfficiency}</td>
+                  {/* <td>{usage.averageFuelEfficiency}</td> */}
                 </tr>
                 <tr>
                   <th>Total Distance Driven</th>
-                  <td>{usage.totalDistance}</td>
+                  {/* <td>{usage.totalDistance}</td> */}
                 </tr>
                 <tr>
                   <th>Eco-Driving Score</th>
-                  <td>
+                  {/* <td>
                     <ProgressBar now={usage.ecoDrivingScore} label={`${usage.ecoDrivingScore}%`} variant="success" />
-                  </td>
+                  </td> */}
                 </tr>
               </tbody>
             </Table>
@@ -508,11 +483,11 @@ function UsageEfficiency({ usage }) {
         <Col>
           <div className="bg-white p-4 shadow-sm rounded">
             <h4>Tips for Better Efficiency</h4>
-            <ListGroup>
+            {/* <ListGroup>
               {usage.efficiencyTips.map((tip, index) => (
                 <ListGroup.Item key={index}>{tip}</ListGroup.Item>
               ))}
-            </ListGroup>
+            </ListGroup> */}
           </div>
         </Col>
       </Row>
@@ -576,11 +551,6 @@ function Wiki() {
           <div className="bg-white p-4 shadow-sm rounded">
             <h4>Wiki</h4>
             <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
-            <ListGroup>
-              <ListGroup.Item>What is Telematics?</ListGroup.Item>
-              <ListGroup.Item>How Telematics Improves Fleet Management</ListGroup.Item>
-              <ListGroup.Item>Driving Safely with Real-Time Feedback</ListGroup.Item>
-            </ListGroup>
           </div>
         </Col>
       </Row>
@@ -595,7 +565,7 @@ function Wiki() {
               <Button variant="primary">Send</Button>
             </Form>
             <div className="mt-3">
-              <p><strong>Bot:</strong> How can I help you today?</p>
+              {/* <p><strong>Bot:</strong> How can I help you today?</p> */}
             </div>
           </div>
         </Col>
@@ -614,9 +584,11 @@ function ViewVehicle() {
       case 'vehicleProfile':
         return <VehicleProfile vehicle={vehicleData} />;
       case 'usageEfficiency':
-        return <UsageEfficiency usage={usageData} />;
+        return <UsageEfficiency />; //usage={usageData} />;
+        // return <VehicleProfile vehicle={vehicleData} />;
       case 'safety':
-        return <Safety safety={safetyData} />;
+        // return <Safety safety={safetyData} />;
+        return <VehicleProfile vehicle={vehicleData} />;
       case 'wiki':
         return <Wiki />;
       default:
