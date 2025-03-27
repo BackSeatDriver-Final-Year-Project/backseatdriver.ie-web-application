@@ -45,6 +45,7 @@ body{
 
 .col{
   width: 100px;
+  border:1px solid black;
 }
 
 @media (prefers-reduced-motion: no-preference) {
