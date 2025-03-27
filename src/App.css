@@ -43,6 +43,10 @@ body{
     margin-right: 5%;
 }
 
+.bg-white{
+  margin:5px;
+}
+
 .col{
   width: 100px;
   border:1px solid black;

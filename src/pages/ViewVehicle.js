@@ -27,9 +27,9 @@ const customMarker = new L.Icon({
   iconUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // Update this path
   iconSize: [41, 41],  // Default Leaflet marker size
   iconAnchor: [12, 41], // Center bottom point
-  popupAnchor: [1, -34], 
+  popupAnchor: [1, -34],
   // shadowUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // Optional
-  shadowSize: [41, 41], 
+  shadowSize: [41, 41],
 });
 
 const mapContainerStyle = {
@@ -164,23 +164,12 @@ const VehicleProfile = () => {
 
       {obdData ? (
         <Row>
-          
+
           <Col className="col-info">
-          <Row><Col className="col-info"><strong>Last Login:</strong>  Live</Col></Row>
+            <Row><Col className="col-info"><strong>Last Login:</strong>  Live</Col></Row>
 
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
               <JourneyMap journey={obdData.jounrey} />
-
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={obdData.fuel_usage}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
             </div>
           </Col>
           <Col>
@@ -231,12 +220,28 @@ const VehicleProfile = () => {
               <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
             </Row>
           </Col>
+          <Row>
+            <Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={obdData.fuel_usage}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Col>
+          </Row>
         </Row>
       ) : (
         <Row>
 
           <Col>
-          <Row><Col className="col-info"><strong>Last Login:</strong>  Yesterday</Col></Row>
+            <Row><Col className="col-info"><strong>Last Login:</strong>  Yesterday</Col></Row>
 
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
               <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '100%' }}>
@@ -248,17 +253,6 @@ const VehicleProfile = () => {
                   <Popup>Vehicle Location</Popup>
                 </Marker>
               </MapContainer>
-
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={[{ name: 0, value: 0 }]}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
             </div>
           </Col>
           <Col>
@@ -309,7 +303,24 @@ const VehicleProfile = () => {
               <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
             </Row>
           </Col>
+          <Row>
+            <Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={[{ name: 0, value: 0 }]}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Col>
+          </Row>
         </Row>
+
       )}
 
     </Container>
