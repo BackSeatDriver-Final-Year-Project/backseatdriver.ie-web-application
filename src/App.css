@@ -26,6 +26,27 @@ body{
   pointer-events: none; 
 } */
 
+.btn-link{
+  color: blue!important;;
+}
+
+.fas {
+  color:white!important;
+  font-size: 23px;
+}
+
+.btn-danger{
+  bottom: 5px;
+    position: absolute;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.col{
+  width: 100px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

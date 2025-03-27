@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import { io } from 'socket.io-client';
 // import Graph from './Graph'; // Import the Graph component
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import L from 'leaflet';
 
 
 import Speedometer, {
@@ -21,6 +22,15 @@ import Speedometer, {
 
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
 
+
+const customMarker = new L.Icon({
+  iconUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // Update this path
+  iconSize: [41, 41],  // Default Leaflet marker size
+  iconAnchor: [12, 41], // Center bottom point
+  popupAnchor: [1, -34], 
+  // shadowUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // Optional
+  shadowSize: [41, 41], 
+});
 
 const mapContainerStyle = {
   width: '100%',
@@ -67,162 +77,20 @@ const randomValues = getRange(200).map(index => {
   };
 });
 
-const vehicleData = {
-  make: 'Toyota',
-  model: 'Corolla',
-  year: '2020',
-  fuelType: 'Petrol',
-  mileage: '50,000 km',
-  fuelEfficiency: '15 km/L',
-  engineHealth: 'Good',
-  tirePressure: 'Optimal',
-  engineHealthScore: 85,
-  trips: [
-    { date: '2024-11-15', distance: '120 km', fuelUsed: '8 L' },
-    { date: '2024-11-14', distance: '90 km', fuelUsed: '6 L' },
-  ],
-};
-
-
-
-// const TestVehicleProfile = () => {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-//   const token = localStorage.getItem('token');
-//   const [vehicle, setVehicle] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   const fetchVehicle = async () => {
-//     if (!token) {
-//       navigate('/login');
-//       return;
-//     }
-//     try {
-//       const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
-//         method: 'GET',
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//       if (response.ok) {
-//         const data = await response.json();
-//         setVehicle(data);
-//       } else {
-//         console.error('Failed to fetch vehicle:', response.status);
-//       }
-//     } catch (error) {
-//       console.error('Error fetching vehicle:', error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchVehicle();
-//   }, [id, token, navigate]);
-
-//   if (loading) {
-//     return <p>Loading vehicle data...</p>;
-//   }
-//   if (!vehicle) {
-//     return <p>Vehicle not found</p>;
-//   }
-
-//   const position = [vehicle.location_lat, vehicle.location_long];
-
-//   return (
-//     <>
-//       <Row className="mb-4">
-//         <Col>
-//           <div className="bg-white p-4 shadow-sm rounded">
-//             <Row>
-
-//             <Col>
-//                 <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-//                   <h4>Current Location</h4>
-//                   <MapContainer center={position} zoom={13} style={{ width: '100%', height: '100%' }}>
-//                     <TileLayer
-//                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//                     />
-//                     <Marker position={position}>
-//                       <Popup>
-//                         {vehicle.name} is located here.<br/>
-//                         Latitude: {vehicle.location_lat}, Longitude: {vehicle.location_long}
-//                       </Popup>
-//                     </Marker>
-//                   </MapContainer>
-//                 </div>
-//               </Col>
-
-//               <Col>
-//                 <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-//                   <h4>Current Location</h4>
-//                   <MapContainer center={position} zoom={13} style={{ width: '100%', height: '100%' }}>
-//                     <TileLayer
-//                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//                     />
-//                     <Marker position={position}>
-//                       <Popup>
-//                         {vehicle.name} is located here.<br/>
-//                         Latitude: {vehicle.location_lat}, Longitude: {vehicle.location_long}
-//                       </Popup>
-//                     </Marker>
-//                   </MapContainer>
-//                 </div>
-//               </Col>
-//               <Col>
-//                 <h4>{vehicle.name}</h4>
-//                 <i>Last connection : {vehicle.last_login}</i>
-//                 <Table striped bordered hover>
-//                   <tbody>
-//                     <tr>
-//                       <th>Device name</th>
-//                       <td>{vehicle.device_name}</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Vehicle ID</th>
-//                       <td>{vehicle.VID}</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Device charging status</th>
-//                       <td>{vehicle.device_charging_status}</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Fuel Level</th>
-//                       <td>75%</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Battery Health</th>
-//                       <td>Good</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Tire Pressure</th>
-//                       <td>Optimal</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Average Speed</th>
-//                       <td>60 km/h</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Total Trips Logged</th>
-//                       <td>150</td>
-//                     </tr>
-//                     <tr>
-//                       <th>Last Service Date</th>
-//                       <td>2024-10-01</td>
-//                     </tr>
-//                   </tbody>
-//                 </Table>
-//               </Col>
-//             </Row>
-//           </div>
-//         </Col>
-//       </Row>
-//     </>
-//   );
+// const vehicleData = {
+//   make: 'Toyota',
+//   model: 'Corolla',
+//   year: '2020',
+//   fuelType: 'Petrol',
+//   mileage: '50,000 km',
+//   fuelEfficiency: '15 km/L',
+//   engineHealth: 'Good',
+//   tirePressure: 'Optimal',
+//   engineHealthScore: 85,
+//   trips: [
+//     { date: '2024-11-15', distance: '120 km', fuelUsed: '8 L' },
+//     { date: '2024-11-14', distance: '90 km', fuelUsed: '6 L' },
+//   ],
 // };
 
 const JourneyMap = ({ journey }) => {
@@ -295,7 +163,7 @@ const VehicleProfile = () => {
 
       {obdData ? (
         <Row>
-          <Col>
+          <Col className="col-info">
 
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
               <JourneyMap journey={obdData.jounrey} />
@@ -363,7 +231,9 @@ const VehicleProfile = () => {
         </Row>
       ) : (
         <Row>
+
           <Col>
+          <Row><Col className="col-info"><strong>Last Login:</strong>  Yesterday</Col></Row>
 
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
               <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '100%' }}>
@@ -371,16 +241,13 @@ const VehicleProfile = () => {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                <Marker position={[37.7749, -122.4194]}>
-                  <Popup>
-                    {/* {vehicle.name} is located here.<br /> */}
-                    Latitude:  37.7749, Longitude: -122.4194
-                  </Popup>
+                <Marker position={[37.7749, -122.4194]} icon={customMarker}>
+                  <Popup>Vehicle Location</Popup>
                 </Marker>
               </MapContainer>
 
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={[{name:0, value:0}]}>
+                <LineChart data={[{ name: 0, value: 0 }]}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
@@ -582,13 +449,13 @@ function ViewVehicle() {
   const renderView = () => {
     switch (activeView) {
       case 'vehicleProfile':
-        return <VehicleProfile vehicle={vehicleData} />;
+        return <VehicleProfile />;
       case 'usageEfficiency':
         return <UsageEfficiency />; //usage={usageData} />;
-        // return <VehicleProfile vehicle={vehicleData} />;
+      // return <VehicleProfile vehicle={vehicleData} />;
       case 'safety':
         // return <Safety safety={safetyData} />;
-        return <VehicleProfile vehicle={vehicleData} />;
+        return <VehicleProfile />;
       case 'wiki':
         return <Wiki />;
       default:

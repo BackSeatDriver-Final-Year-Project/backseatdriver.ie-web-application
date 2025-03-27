@@ -17,7 +17,15 @@ const Sidebar = ({ setActiveView }) => {
       onMouseLeave={() => setIsHovered(false)} // Collapse when not hovered
     >
       <div className="sidebar-header border-bottom">
-        <div className="sidebar-brand">CM</div>
+        {/* <div className="sidebar-brand">CM</div> */}
+        <img
+      src="https://avatars.githubusercontent.com/u/188066935?s=200&v=4"
+      alt="Avatar"
+      style={{
+        width: "100%",
+        maxWidth: "50px",
+        borderRadius: "50%",
+      }}/>
       </div>
       <ul className="sidebar-nav">
         <li className="nav-item">
