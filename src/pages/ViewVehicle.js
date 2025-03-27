@@ -158,12 +158,15 @@ const VehicleProfile = () => {
     return () => socket.off('updateObdData');
   }, [vin]);
 
+
   return (
     <Container>
 
       {obdData ? (
         <Row>
+          
           <Col className="col-info">
+          <Row><Col className="col-info"><strong>Last Login:</strong>  Live</Col></Row>
 
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
               <JourneyMap journey={obdData.jounrey} />
