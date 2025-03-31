@@ -1,3 +1,8 @@
+.sidebarLink{
+  color: white!important;
+  outline: none;
+}
+
 .sidebar {
   position: fixed;
   width: 60px; /* Default collapsed width */

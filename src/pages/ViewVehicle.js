@@ -2,13 +2,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar';
-import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button, Pagination } from 'react-bootstrap';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { io } from 'socket.io-client';
 // import Graph from './Graph'; // Import the Graph component
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import L from 'leaflet';
+import Modal from 'react-bootstrap/Modal';
 
 
 import Speedometer, {
@@ -21,6 +22,7 @@ import Speedometer, {
 } from 'react-speedometer';
 
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
+// const socket = io('http://localhost:3000'); // Replace with your actual API endpoint
 
 
 const customMarker = new L.Icon({
@@ -122,7 +124,8 @@ const VehicleProfile = () => {
   useEffect(() => {
     const fetchVin = async () => {
       try {
-        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`,{
+        // const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -174,33 +177,39 @@ const VehicleProfile = () => {
           </Col>
           <Col>
             <Row>
-              <Col>
-                <Speedometer
-                  value={obdData.vehicleSpeed}
-                  fontFamily='squada-one'
-                >
-                  <Background />
-                  <Arc />
-                  <Needle />
-                  <Progress />
-                  <Marks />
-                  <Indicator />
-                </Speedometer>
-              </Col>
 
-              <Col>
-                <Speedometer
-                  value={obdData.engineRPM}
-                  fontFamily='squada-one'
-                >
-                  <Background />
-                  <Arc />
-                  <Needle />
-                  <Progress />
-                  <Marks />
-                  <Indicator />
-                </Speedometer>
-              </Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Dash</h4>
+                <Col>
+                  <Speedometer
+                    width={190}
+                    value={obdData.engineRPM}
+                    fontFamily='squada-one'
+                  >
+                    <Background />
+                    <Arc />
+                    <Needle />
+                    <Progress />
+                    <Marks />
+                    <Indicator />
+                  </Speedometer>
+                </Col>
+
+                <Col>
+                  <Speedometer
+                    width={190}
+                    value={obdData.vehicleSpeed}
+                    fontFamily='squada-one'
+                  >
+                    <Background />
+                    <Arc />
+                    <Needle />
+                    <Progress />
+                    <Marks />
+                    <Indicator />
+                  </Speedometer>
+                </Col>
+              </div>
             </Row>
             <Row>
               <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM} RPM</Col>
@@ -223,6 +232,7 @@ const VehicleProfile = () => {
           <Row>
             <Col>
               <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Fuel Usage</h4>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={obdData.fuel_usage}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -244,7 +254,8 @@ const VehicleProfile = () => {
             <Row><Col className="col-info"><strong>Last Login:</strong>  Yesterday</Col></Row>
 
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-              <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '100%' }}>
+              <h4>Location</h4>
+              <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '90%' }}>
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -257,33 +268,38 @@ const VehicleProfile = () => {
           </Col>
           <Col>
             <Row>
-              <Col>
-                <Speedometer
-                  value={0}
-                  fontFamily='squada-one'
-                >
-                  <Background />
-                  <Arc />
-                  <Needle />
-                  <Progress />
-                  <Marks />
-                  <Indicator />
-                </Speedometer>
-              </Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Dash</h4>
+                <Col>
+                  <Speedometer
+                    width={190}
+                    value={0}
+                    fontFamily='squada-one'
+                  >
+                    <Background />
+                    <Arc />
+                    <Needle />
+                    <Progress />
+                    <Marks />
+                    <Indicator />
+                  </Speedometer>
+                </Col>
 
-              <Col>
-                <Speedometer
-                  value={0}
-                  fontFamily='squada-one'
-                >
-                  <Background />
-                  <Arc />
-                  <Needle />
-                  <Progress />
-                  <Marks />
-                  <Indicator />
-                </Speedometer>
-              </Col>
+                <Col>
+                  <Speedometer
+                    width={190}
+                    value={0}
+                    fontFamily='squada-one'
+                  >
+                    <Background />
+                    <Arc />
+                    <Needle />
+                    <Progress />
+                    <Marks />
+                    <Indicator />
+                  </Speedometer>
+                </Col>
+              </div>
             </Row>
             <Row>
               <Col className="col-info"><strong>Engine RPM:</strong> 0 RPM</Col>
@@ -306,6 +322,7 @@ const VehicleProfile = () => {
           <Row>
             <Col>
               <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Fuel Usage</h4>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={[{ name: 0, value: 0 }]}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -327,54 +344,180 @@ const VehicleProfile = () => {
   );
 };
 
+const fetchAddress = async (lat, lon) => {
+  try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+      const data = await response.json();
+      if (data && data.display_name) {
+          return data.display_name; // Full address
+      }
+      return "Address not found";
+  } catch (error) {
+      console.error("Error fetching address:", error);
+      return "Error fetching address";
+  }
+};
 
-function UsageEfficiency() {//({ usage }) {
+// import { useEffect, useState } from 'react';
+// import { useParams } from 'react-router-dom';
+// import { Container, Row, Col, ListGroup, Button, Modal, Pagination } from 'react-bootstrap';
+// import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
+// import 'leaflet/dist/leaflet.css';
+
+const UsageEfficiency = () => {
+  const { id } = useParams();
+  const [journeyData, setJourneyData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedJourney, setSelectedJourney] = useState(null);
+  const itemsPerPage = 15;
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    const fetchJourneyData = async () => {
+      try {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/journeys/${id}`, {
+        // const response = await fetch(`http://localhost:3000/journeys/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Error fetching journey data: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setJourneyData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchJourneyData();
+    }
+  }, [id]);
+
+  const handleShowModal = (journey) => {
+    console.log(journey);
+    setSelectedJourney(journey.journey_dataset[(journey.journey_dataset.length)-1].jounrey);
+    console.log(journey.journey_dataset[(journey.journey_dataset.length)-1].jounrey);
+    // {journeyData?.journey_dataset?.at(-1)?.journey}
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = journeyData ? journeyData.slice(indexOfFirstItem, indexOfLastItem) : [];
+
+  const totalPages = journeyData ? Math.ceil(journeyData.length / itemsPerPage) : 1;
+
   return (
-    <>
-      <Row className="mb-4">
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Usage & Efficiency</h4>
-            <Table striped bordered hover>
-              <tbody>
-                <tr>
-                  <th>Total Fuel Cost</th>
-                  {/* <td>{usage.fuelCost}</td> */}
-                </tr>
-                <tr>
-                  <th>Average Fuel Efficiency</th>
-                  {/* <td>{usage.averageFuelEfficiency}</td> */}
-                </tr>
-                <tr>
-                  <th>Total Distance Driven</th>
-                  {/* <td>{usage.totalDistance}</td> */}
-                </tr>
-                <tr>
-                  <th>Eco-Driving Score</th>
-                  {/* <td>
-                    <ProgressBar now={usage.ecoDrivingScore} label={`${usage.ecoDrivingScore}%`} variant="success" />
-                  </td> */}
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Tips for Better Efficiency</h4>
-            {/* <ListGroup>
-              {usage.efficiencyTips.map((tip, index) => (
-                <ListGroup.Item key={index}>{tip}</ListGroup.Item>
-              ))}
-            </ListGroup> */}
-          </div>
-        </Col>
-      </Row>
-    </>
+    <Container>
+      {journeyData ? (
+        <>
+          <Row className="mb-4">
+            <Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Your Journeys</h4>
+                <ListGroup>
+                  {currentItems.map((journey) => (
+                    <ListGroup.Item key={journey.journey_id}>
+                                            Journey from {journey.journey_dataset[journey.journey_dataset.length-1].jounrey[0].toString()} to 
+                      {journey.journey_dataset[journey.journey_dataset.length-1].jounrey[journey.journey_dataset[journey.journey_dataset.length-1].jounrey[3].length-1].toString()} <br/>
+                      {/* Journey ID: {journey.journey_id} */}
+                      Duration : {journey.journey_duration}
+                      <Button
+                        variant="primary"
+                        className="ms-2"
+                        onClick={() => handleShowModal(journey)}
+                      >
+                        View Journey
+                      </Button>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <Pagination className="mt-3">
+                  <Pagination.Prev
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  />
+                  {[...Array(totalPages).keys()].map((page) => (
+                    <Pagination.Item
+                      key={page + 1}
+                      active={page + 1 === currentPage}
+                      onClick={() => setCurrentPage(page + 1)}
+                    >
+                      {page + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                  />
+                </Pagination>
+              </div>
+            </Col>
+          </Row>
+
+          {/* Modal with Map */}
+          <Modal show={showModal} onHide={handleCloseModal} size="lg">
+            <Modal.Header closeButton>
+              <Modal.Title>Journey Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <h5>{journeyData.journey_duration}</h5>
+              {journeyData && (
+                <>
+                  <ListGroup>
+                    <ListGroup.Item>{journeyData.journey_duration}</ListGroup.Item>
+                  {/* <ListGroup.Item>Route: {selectedJourney}</ListGroup.Item> */}
+                    {/* <ListGroup.Item>Distance: {selectedJourney.journey_dataset.distance_km} km</ListGroup.Item>
+                    <ListGroup.Item>Duration: {selectedJourney.journey_dataset.duration_min} min</ListGroup.Item>
+                    <ListGroup.Item>Start Time: {new Date(selectedJourney.journey_start_time).toLocaleString()}</ListGroup.Item> */}
+                  </ListGroup>
+                  {/* {selectedJourney && ( */}
+                    <MapContainer
+                      center={[53.34804851027272, -6.253359479333355]}
+                      zoom={13}
+                      style={{ height: '400px', width: '100%', marginTop: '20px' }}
+                    >
+                      <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Polyline
+                        positions={selectedJourney}
+                        color="blue"
+                      />
+                    </MapContainer>
+                  {/* )} */}
+                </>
+              )}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseModal}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </>
+      ) : (
+        <Row>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded"><h4>No Journeys for this vehicle available.</h4></div>
+          </Col>
+        </Row>
+      )}
+    </Container>
   );
-}
+};
+
+
 
 function Safety({ safety }) {
   return (

@@ -29,25 +29,25 @@ const Sidebar = ({ setActiveView }) => {
       </div>
       <ul className="sidebar-nav">
         <li className="nav-item">
-          <button className="btn btn-link" onClick={() => setActiveView('vehicleProfile')}>
+          <button className="btn btn-link sidebarLink" onClick={() => setActiveView('vehicleProfile')}>
             <MDBIcon fas icon="car" /> {/* Vehicle icon */}
             {isHovered && <small>Vehicle Profile</small>}
           </button>
         </li>
         <li className="nav-item">
-          <button className="btn btn-link" onClick={() => setActiveView('usageEfficiency')}>
+          <button className="btn btn-link sidebarLink" onClick={() => setActiveView('usageEfficiency')}>
             <MDBIcon fas icon="chart-line" /> {/* Usage/Efficiency icon */}
             {isHovered && <small>Usage & Efficiency</small>}
           </button>
         </li>
         <li className="nav-item">
-          <button className="btn btn-link" onClick={() => setActiveView('safety')}>
+          <button className="btn btn-link sidebarLink" onClick={() => setActiveView('safety')}>
             <MDBIcon fas icon="shield-alt" /> {/* Safety icon */}
             {isHovered && <small>Safety</small>}
           </button>
         </li>
         <li className="nav-item">
-          <button className="btn btn-link" onClick={() => setActiveView('wiki')}>
+          <button className="btn btn-link sidebarLink" onClick={() => setActiveView('wiki')}>
             <MDBIcon fas icon="book" /> {/* Wiki icon */}
             {isHovered && <small>BackSeatDriver Wiki</small>}
           </button>

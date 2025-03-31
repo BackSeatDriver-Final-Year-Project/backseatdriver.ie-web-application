@@ -26,6 +26,15 @@ body{
   pointer-events: none; 
 } */
 
+.container, .container-lg, .container-md, .container-sm, .container-xl{
+  max-width: 95%!important;
+  width: 95%!important;
+}
+
+.container {
+  width: 95%!important;
+}
+
 .btn-link{
   color: blue!important;;
 }
@@ -47,9 +56,10 @@ body{
   margin:5px;
 }
 
-.col{
-  width: 100px;
-  border:1px solid black;
+.bg-white .col{
+  float: left;
+  width: 50%;
+  /* border:1px solid black; */
 }
 
 @media (prefers-reduced-motion: no-preference) {
