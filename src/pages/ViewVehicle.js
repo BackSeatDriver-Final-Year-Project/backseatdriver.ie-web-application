@@ -110,6 +110,7 @@ const JourneyMap = ({ journey }) => {
 
 const VehicleProfile = () => {
   const { id } = useParams(); // Get vehicle ID from the URL
+  const [checked, setChecked] = useState(false);
   const [vin, setVin] = useState(null);
   const [obdData, setObdData] = useState(null);
   const token = localStorage.getItem('token');
@@ -124,8 +125,8 @@ const VehicleProfile = () => {
   useEffect(() => {
     const fetchVin = async () => {
       try {
-        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`,{
-        // const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
+          // const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -161,166 +162,38 @@ const VehicleProfile = () => {
     return () => socket.off('updateObdData');
   }, [vin]);
 
+  const handleToggle = () => {
+    setChecked(!checked);
+  };
+
 
   return (
     <Container>
 
       {obdData ? (
-        <Row>
-
-          <Col className="col-info">
-            <Row><Col className="col-info"><strong>Last Login:</strong>  Live</Col></Row>
-
-            <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-              <JourneyMap journey={obdData.jounrey} />
-            </div>
-          </Col>
-          <Col>
-            <Row>
-
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Dash</h4>
-                <Col>
-                  <Speedometer
-                    width={190}
-                    value={obdData.engineRPM}
-                    fontFamily='squada-one'
-                  >
-                    <Background />
-                    <Arc />
-                    <Needle />
-                    <Progress />
-                    <Marks />
-                    <Indicator />
-                  </Speedometer>
-                </Col>
-
-                <Col>
-                  <Speedometer
-                    width={190}
-                    value={obdData.vehicleSpeed}
-                    fontFamily='squada-one'
-                  >
-                    <Background />
-                    <Arc />
-                    <Needle />
-                    <Progress />
-                    <Marks />
-                    <Indicator />
-                  </Speedometer>
-                </Col>
-              </div>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM} RPM</Col>
-              <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed} km/h</Col>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuelLevel}%</Col>
-              <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Mass Air Flow:</strong> {obdData.massAirFlow} g/s</Col>
-              <Col className="col-info"><strong>Intake Air Temp:</strong> {obdData.intakeAirTemp}°C</Col>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Coolant Temp:</strong> {obdData.coolantTemp}°C</Col>
-              {/* <li><strong>Latitude :</strong> {obdData.latitude}°C</li>
-              <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
-            </Row>
-          </Col>
+        <>
           <Row>
             <Col>
               <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Fuel Usage</h4>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={obdData.fuel_usage}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
+                <h4>Location</h4>
+
+                <Form>
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label={checked ? "Live view" : "Historic Data View"}
+                    checked={checked}
+                    onChange={handleToggle}
+                  />
+                </Form>
+
               </div>
-            </Col>
-          </Row>
-        </Row>
-      ) : (
-        <Row>
 
-          <Col>
-            <Row><Col className="col-info"><strong>Last Login:</strong>  Yesterday</Col></Row>
-
-            <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-              <h4>Location</h4>
-              <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '90%' }}>
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={[37.7749, -122.4194]} icon={customMarker}>
-                  <Popup>Vehicle Location</Popup>
-                </Marker>
-              </MapContainer>
-            </div>
-          </Col>
-          <Col>
-            <Row>
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Dash</h4>
-                <Col>
-                  <Speedometer
-                    width={190}
-                    value={0}
-                    fontFamily='squada-one'
-                  >
-                    <Background />
-                    <Arc />
-                    <Needle />
-                    <Progress />
-                    <Marks />
-                    <Indicator />
-                  </Speedometer>
-                </Col>
-
-                <Col>
-                  <Speedometer
-                    width={190}
-                    value={0}
-                    fontFamily='squada-one'
-                  >
-                    <Background />
-                    <Arc />
-                    <Needle />
-                    <Progress />
-                    <Marks />
-                    <Indicator />
-                  </Speedometer>
-                </Col>
+              <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+                <h4>Location</h4>
+                <JourneyMap journey={obdData.jounrey} />
               </div>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Engine RPM:</strong> 0 RPM</Col>
-              <Col className="col-info"><strong>Vehicle Speed:</strong> 0 km/h</Col>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Fuel Level:</strong> 0%</Col>
-              <Col className="col-info"><strong>Throttle Position:</strong> 0%</Col>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
-              <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
-            </Row>
-            <Row>
-              <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
-              {/* <li><strong>Latitude :</strong> {obdData.latitude}°C</li>
-              <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
-            </Row>
-          </Col>
-          <Row>
-            <Col>
+
               <div className="bg-white p-4 shadow-sm rounded">
                 <h4>Fuel Usage</h4>
                 <ResponsiveContainer width="100%" height={300}>
@@ -335,26 +208,383 @@ const VehicleProfile = () => {
                 </ResponsiveContainer>
               </div>
             </Col>
+            <Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Dash</h4>
+                <Row>
+                  <Col>
+                    <Speedometer
+                      width={200}
+                      value={0}
+                      fontFamily='squada-one'
+                    >
+                      <Background />
+                      <Arc />
+                      <Needle />
+                      <Progress />
+                      <Marks />
+                      <Indicator />
+                    </Speedometer>
+                  </Col>
+                  <Col>
+                    <Speedometer
+                      width={200}
+                      value={0}
+                      fontFamily='squada-one'
+                    >
+                      <Background />
+                      <Arc />
+                      <Needle />
+                      <Progress />
+                      <Marks />
+                      <Indicator />
+                    </Speedometer>
+                  </Col>
+                </Row>
+              </div>
+
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Engine RPM</strong></td>
+                      <td>0 RPM</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Fuel Level</strong></td>
+                      <td>0%</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Mass Air Flow</strong></td>
+                      <td>0g/s</td>
+                    </tr>
+
+                    <tr>
+
+                      <td><strong>Coolant Temp</strong></td>
+                      <td>0°C</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Vehicle Speed</strong></td>
+                      <td>0km/h</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Throttle Position</strong></td>
+                      <td>0%</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Intake Air Temp</strong></td>
+                      <td>0°C</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM}RPM</Col>
+                <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed}km/h</Col>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuel_usage}%</Col>
+                <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
+                <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
+              </Row>
+            </Col>
+            <Row>
+              <Col>
+                <div className="bg-white p-4 shadow-sm rounded">
+                  <h4>Fuel Usage</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={obdData.fuel_usage}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </Col>
+            </Row>
           </Row>
-        </Row>
+        </>
 
+        // <Row>
+
+        //   <Col className="col-info">
+        //     <Row><Col className="col-info"><strong>Last Login:</strong>  Live</Col></Row>
+
+        //     <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+        //       <JourneyMap journey={obdData.jounrey} />
+        //     </div>
+        //   </Col>
+        //   <Col>
+        //     <Row>
+
+        //       <div className="bg-white p-4 shadow-sm rounded">
+        //         <h4>Dash</h4>
+        //         <Col>
+        //           <Speedometer
+        //             width={190}
+        //             value={obdData.engineRPM}
+        //             fontFamily='squada-one'
+        //           >
+        //             <Background />
+        //             <Arc />
+        //             <Needle />
+        //             <Progress />
+        //             <Marks />
+        //             <Indicator />
+        //           </Speedometer>
+        //         </Col>
+
+        //         <Col>
+        //           <Speedometer
+        //             width={190}
+        //             value={obdData.vehicleSpeed}
+        //             fontFamily='squada-one'
+        //           >
+        //             <Background />
+        //             <Arc />
+        //             <Needle />
+        //             <Progress />
+        //             <Marks />
+        //             <Indicator />
+        //           </Speedometer>
+        //         </Col>
+        //       </div>
+        //     </Row>
+        //     <Row>
+        //       <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM} RPM</Col>
+        //       <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed} km/h</Col>
+        //     </Row>
+        //     <Row>
+        //       <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuelLevel}%</Col>
+        //       <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
+        //     </Row>
+        //     <Row>
+        //       <Col className="col-info"><strong>Mass Air Flow:</strong> {obdData.massAirFlow} g/s</Col>
+        //       <Col className="col-info"><strong>Intake Air Temp:</strong> {obdData.intakeAirTemp}°C</Col>
+        //     </Row>
+        //     <Row>
+        //       <Col className="col-info"><strong>Coolant Temp:</strong> {obdData.coolantTemp}°C</Col>
+        //       {/* <li><strong>Latitude :</strong> {obdData.latitude}°C</li>
+        //       <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
+        //     </Row>
+        //   </Col>
+        //   <Row>
+        //     <Col>
+        //       <div className="bg-white p-4 shadow-sm rounded">
+        //         <h4>Fuel Usage</h4>
+        //         <ResponsiveContainer width="100%" height={300}>
+        //           <LineChart data={obdData.fuel_usage}>
+        //             <CartesianGrid strokeDasharray="3 3" />
+        //             <XAxis dataKey="name" />
+        //             <YAxis />
+        //             <Tooltip />
+        //             <Legend />
+        //             <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+        //           </LineChart>
+        //         </ResponsiveContainer>
+        //       </div>
+        //     </Col>
+        //   </Row>
+        // </Row>
+      ) : (
+        <>
+          <Row>
+            <Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Location</h4>
+
+                <Form>
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label={checked ? "Live view" : "Historic Data View"}
+                    checked={checked}
+                    onChange={handleToggle}
+                  />
+                </Form>
+
+              </div>
+
+              <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+                <h4>Location</h4>
+                <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '90%' }}>
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
+                  <Marker position={[37.7749, -122.4194]} icon={customMarker}>
+                    <Popup>Vehicle Location</Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Fuel Usage</h4>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={[{ name: 0, value: 0 }]}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Col>
+            <Col>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Dash</h4>
+                <Row>
+                  <Col>
+                    <Speedometer
+                      width={200}
+                      value={0}
+                      fontFamily='squada-one'
+                    >
+                      <Background />
+                      <Arc />
+                      <Needle />
+                      <Progress />
+                      <Marks />
+                      <Indicator />
+                    </Speedometer>
+                  </Col>
+                  <Col>
+                    <Speedometer
+                      width={200}
+                      value={0}
+                      fontFamily='squada-one'
+                    >
+                      <Background />
+                      <Arc />
+                      <Needle />
+                      <Progress />
+                      <Marks />
+                      <Indicator />
+                    </Speedometer>
+                  </Col>
+                </Row>
+              </div>
+
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Engine RPM</strong></td>
+                      <td>0 RPM</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Fuel Level</strong></td>
+                      <td>0%</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Mass Air Flow</strong></td>
+                      <td>0g/s</td>
+                    </tr>
+
+                    <tr>
+
+                      <td><strong>Coolant Temp</strong></td>
+                      <td>0°C</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Vehicle Speed</strong></td>
+                      <td>0km/h</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Throttle Position</strong></td>
+                      <td>0%</td>
+                    </tr>
+                    <tr>
+
+                      <td><strong>Intake Air Temp</strong></td>
+                      <td>0°C</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Engine RPM:</strong> 0 RPM</Col>
+                <Col className="col-info"><strong>Vehicle Speed:</strong> 0 km/h</Col>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Fuel Level:</strong> 0%</Col>
+                <Col className="col-info"><strong>Throttle Position:</strong> 0%</Col>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
+                <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
+              </Row>
+              <Row>
+                <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
+              </Row>
+            </Col>
+            <Row>
+              <Col>
+                <div className="bg-white p-4 shadow-sm rounded">
+                  <h4>Fuel Usage</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={[{ name: 0, value: 0 }]}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </Col>
+            </Row>
+          </Row>
+        </>
       )}
-
     </Container>
   );
 };
 
 const fetchAddress = async (lat, lon) => {
   try {
-      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-      const data = await response.json();
-      if (data && data.display_name) {
-          return data.display_name; // Full address
-      }
-      return "Address not found";
+    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+    const data = await response.json();
+    if (data && data.display_name) {
+      return data.display_name; // Full address
+    }
+    return "Address not found";
   } catch (error) {
-      console.error("Error fetching address:", error);
-      return "Error fetching address";
+    console.error("Error fetching address:", error);
+    return "Error fetching address";
   }
 };
 
@@ -377,7 +607,7 @@ const UsageEfficiency = () => {
     const fetchJourneyData = async () => {
       try {
         const response = await fetch(`https://backseatdriver-ie-api.onrender.com/journeys/${id}`, {
-        // const response = await fetch(`http://localhost:3000/journeys/${id}`, {
+          // const response = await fetch(`http://localhost:3000/journeys/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -401,8 +631,8 @@ const UsageEfficiency = () => {
 
   const handleShowModal = (journey) => {
     console.log(journey);
-    setSelectedJourney(journey.journey_dataset[(journey.journey_dataset.length)-1].jounrey);
-    console.log(journey.journey_dataset[(journey.journey_dataset.length)-1].jounrey);
+    setSelectedJourney(journey.journey_dataset[(journey.journey_dataset.length) - 1].jounrey);
+    console.log(journey.journey_dataset[(journey.journey_dataset.length) - 1].jounrey);
     // {journeyData?.journey_dataset?.at(-1)?.journey}
     setShowModal(true);
   };
@@ -428,8 +658,8 @@ const UsageEfficiency = () => {
                 <ListGroup>
                   {currentItems.map((journey) => (
                     <ListGroup.Item key={journey.journey_id}>
-                                            Journey from {journey.journey_dataset[journey.journey_dataset.length-1].jounrey[0].toString()} to 
-                      {journey.journey_dataset[journey.journey_dataset.length-1].jounrey[journey.journey_dataset[journey.journey_dataset.length-1].jounrey[3].length-1].toString()} <br/>
+                      Journey from {journey.journey_dataset[journey.journey_dataset.length - 1].jounrey[0].toString()} to
+                      {journey.journey_dataset[journey.journey_dataset.length - 1].jounrey[journey.journey_dataset[journey.journey_dataset.length - 1].jounrey[3].length - 1].toString()} <br />
                       {/* Journey ID: {journey.journey_id} */}
                       Duration : {journey.journey_duration}
                       <Button
@@ -476,25 +706,25 @@ const UsageEfficiency = () => {
                 <>
                   <ListGroup>
                     <ListGroup.Item>{journeyData.journey_duration}</ListGroup.Item>
-                  {/* <ListGroup.Item>Route: {selectedJourney}</ListGroup.Item> */}
+                    {/* <ListGroup.Item>Route: {selectedJourney}</ListGroup.Item> */}
                     {/* <ListGroup.Item>Distance: {selectedJourney.journey_dataset.distance_km} km</ListGroup.Item>
                     <ListGroup.Item>Duration: {selectedJourney.journey_dataset.duration_min} min</ListGroup.Item>
                     <ListGroup.Item>Start Time: {new Date(selectedJourney.journey_start_time).toLocaleString()}</ListGroup.Item> */}
                   </ListGroup>
                   {/* {selectedJourney && ( */}
-                    <MapContainer
-                      center={[53.34804851027272, -6.253359479333355]}
-                      zoom={13}
-                      style={{ height: '400px', width: '100%', marginTop: '20px' }}
-                    >
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <Polyline
-                        positions={selectedJourney}
-                        color="blue"
-                      />
-                    </MapContainer>
+                  <MapContainer
+                    center={[53.34804851027272, -6.253359479333355]}
+                    zoom={13}
+                    style={{ height: '400px', width: '100%', marginTop: '20px' }}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Polyline
+                      positions={selectedJourney}
+                      color="blue"
+                    />
+                  </MapContainer>
                   {/* )} */}
                 </>
               )}
@@ -519,35 +749,14 @@ const UsageEfficiency = () => {
 
 
 
-function Safety({ safety }) {
+function Safety() {
   return (
     <>
       <Row className="mb-4">
         <Col>
           <div className="bg-white p-4 shadow-sm rounded">
             <h4>Safety Overview</h4>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Incident</th>
-                  <th>Severity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {safety.incidents.map((incident, index) => (
-                  <tr key={index}>
-                    <td>{incident.date}</td>
-                    <td>{incident.description}</td>
-                    <td>
-                      <Badge bg={incident.severity === 'High' ? 'danger' : 'warning'}>
-                        {incident.severity}
-                      </Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+
           </div>
         </Col>
       </Row>
@@ -555,11 +764,6 @@ function Safety({ safety }) {
         <Col>
           <div className="bg-white p-4 shadow-sm rounded">
             <h4>Safety Tips</h4>
-            <ListGroup>
-              {safety.safetyTips.map((tip, index) => (
-                <ListGroup.Item key={index}>{tip}</ListGroup.Item>
-              ))}
-            </ListGroup>
           </div>
         </Col>
       </Row>
@@ -611,7 +815,7 @@ function ViewVehicle() {
         return <UsageEfficiency />; //usage={usageData} />;
       // return <VehicleProfile vehicle={vehicleData} />;
       case 'safety':
-        // return <Safety safety={safetyData} />;
+        return <Safety />;
         return <VehicleProfile />;
       case 'wiki':
         return <Wiki />;

@@ -56,11 +56,11 @@ body{
   margin:5px;
 }
 
-.bg-white .col{
+/* .bg-white .col{
   float: left;
   width: 50%;
-  /* border:1px solid black; */
-}
+  border:1px solid black;
+} */
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

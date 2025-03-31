@@ -80,7 +80,7 @@ function MyVehicles() {
           </Col>
         ) : (
           vehicles.map((vehicle) => {
-            console.log(vehicle); // Log each vehicle object to see available properties
+            // console.log(vehicle); // Log each vehicle object to see available properties
             return (
               <Col md={6} lg={3} className="mb-4" key={vehicle.vehicle_id || vehicle._id || vehicle.id}>
                 <Card style={{ width: '100%' }}>
