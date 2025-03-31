@@ -458,7 +458,7 @@ const VehicleProfile = () => {
                 <Row>
                   <Col>
                     <Speedometer
-                      width={200}
+                      width={280}
                       value={0}
                       fontFamily='squada-one'
                     >
@@ -472,7 +472,7 @@ const VehicleProfile = () => {
                   </Col>
                   <Col>
                     <Speedometer
-                      width={200}
+                      width={280}
                       value={0}
                       fontFamily='squada-one'
                     >
@@ -533,21 +533,6 @@ const VehicleProfile = () => {
                     </tr>
                   </tbody>
                 </Table>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Engine RPM:</strong> 0 RPM</Col>
-                <Col className="col-info"><strong>Vehicle Speed:</strong> 0 km/h</Col>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Fuel Level:</strong> 0%</Col>
-                <Col className="col-info"><strong>Throttle Position:</strong> 0%</Col>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
-                <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
               </Row>
             </Col>
             <Row>
