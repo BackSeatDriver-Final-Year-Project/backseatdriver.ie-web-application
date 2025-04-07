@@ -125,8 +125,8 @@ const VehicleProfile = () => {
   useEffect(() => {
     const fetchVin = async () => {
       try {
-        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
-          // const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
+        // const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
+          const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
