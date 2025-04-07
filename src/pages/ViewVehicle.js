@@ -21,6 +21,7 @@ import Speedometer, {
   Indicator,
 } from 'react-speedometer';
 
+
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
 // const socket = io('http://localhost:3000'); // Replace with your actual API endpoint
 
