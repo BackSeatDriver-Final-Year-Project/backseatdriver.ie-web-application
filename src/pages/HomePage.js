@@ -10,7 +10,7 @@ return (
   {/* Hero Section */}
   <div className="bg-dark text-light py-5 text-center">
     <Container>
-      <h1 className="display-4 fw-bold">Global OEM Telematics Solutions</h1>
+      <h1 className="display-4 fw-bold">Advanced Telematics Solutions</h1>
       <p className="lead">
         Empowering OEMs with secure, scalable, and intelligent telematics
         solutions worldwide.
