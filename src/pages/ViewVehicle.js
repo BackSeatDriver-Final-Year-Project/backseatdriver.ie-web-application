@@ -19,8 +19,8 @@ import Speedometer, {
   Progress,
   Marks,
   Indicator,
+  DangerPath,
 } from 'react-speedometer';
-
 
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
 // const socket = io('http://localhost:3000'); // Replace with your actual API endpoint
@@ -47,17 +47,23 @@ const center = {
 
 const today = new Date();
 
-// Dummy data for heatmap
-const heatmapData = [
-  { date: '2024-10-01', count: 2 },
-  { date: '2024-10-02', count: 3 },
-  { date: '2024-10-03', count: 1 },
-  { date: '2024-10-04', count: 5 },
-  { date: '2024-10-05', count: 4 },
-  { date: '2024-10-06', count: 6 },
-  { date: '2024-10-07', count: 2 },
-  // Add more dates as necessary
-];
+
+// Cache to avoid repeated API calls
+const addressCache = {};
+
+const reverseGeocode = async (lat, lon) => {
+  try {
+    const response = await fetch(
+      `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=e4e285c2d4824e47997cecd555f2c65c`
+    );
+    const data = await response.json();
+    return data.results[0]?.formatted || `${lat}, ${lon}`;
+  } catch (error) {
+    console.error("Reverse geocode error:", error);
+    return `${lat}, ${lon}`;
+  }
+};
+
 
 function shiftDate(date, numDays) {
   const newDate = new Date(date);
@@ -109,6 +115,7 @@ const JourneyMap = ({ journey }) => {
   );
 };
 
+
 const VehicleProfile = () => {
   const { id } = useParams(); // Get vehicle ID from the URL
   const [checked, setChecked] = useState(false);
@@ -126,8 +133,8 @@ const VehicleProfile = () => {
   useEffect(() => {
     const fetchVin = async () => {
       try {
-        // const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
-          const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/id/${id}`, {
+          // const response = await fetch(`http://localhost:3000/vehicles/id/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -168,18 +175,175 @@ const VehicleProfile = () => {
   };
 
 
+  console.log(obdData);
+
+
   return (
     <Container>
 
       {obdData ? (
-        <>
-          <Row>
-            <Col>
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Location</h4>
+        // <>
+        //   <Row>
+        //     <Col>
+        //       <div className="bg-white p-4 shadow-sm rounded">
+        //         <h4>Location</h4>
 
-                <Form>
-                  <Form.Check
+        //         <Form>
+        //           <Form.Check
+        //             type="switch"
+        //             id="custom-switch"
+        //             label={checked ? "Live view" : "Historic Data View"}
+        //             checked={checked}
+        //             onChange={handleToggle}
+        //           />
+        //         </Form>
+
+        //       </div>
+
+        //       <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+        //         <h4>Location</h4>
+        //         <JourneyMap journey={obdData.jounrey} />
+        //       </div> here
+
+              // <div className="bg-white p-4 shadow-sm rounded">
+              //   <h4>Fuel Usage</h4>
+              //   <ResponsiveContainer width="100%" height={300}>
+              //     <LineChart data={[{ name: 0, value: 0 }]}>
+              //       <CartesianGrid strokeDasharray="3 3" />
+              //       <XAxis dataKey="name" />
+              //       <YAxis />
+              //       <Tooltip />
+              //       <Legend />
+              //       <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+              //     </LineChart>
+              //   </ResponsiveContainer>
+              // </div> here
+        //     </Col>
+        //     <Col>
+        //       <div className="bg-white p-4 shadow-sm rounded">
+        //         <h4>Dash</h4>
+        //         <Row>
+        //           <Col>
+        //             <Speedometer
+        //               width={200}
+        //               value={0}
+        //               fontFamily='squada-one'
+        //             >
+        //               <Background />
+        //               <Arc />
+        //               <Needle />
+        //               <Progress />
+        //               <Marks />
+        //               <Indicator />
+        //             </Speedometer>
+        //           </Col>
+        //           <Col>
+        //             <Speedometer
+        //               width={200}
+        //               value={0}
+        //               fontFamily='squada-one'
+        //             >
+        //               <Background />
+        //               <Arc />
+        //               <Needle />
+        //               <Progress />
+        //               <Marks />
+        //               <Indicator />
+        //             </Speedometer>
+        //           </Col>
+        //         </Row>
+        //       </div>
+
+              // <Row>
+              //   <Table striped bordered hover>
+              //     <thead>
+              //       <tr>
+              //         <th>Signal</th>
+              //         <th>Value</th>
+              //       </tr>
+              //     </thead>
+              //     <tbody>
+              //       <tr>
+              //         <td><strong>Engine RPM</strong></td>
+              //         <td>0 RPM</td>
+              //       </tr>
+              //       <tr>
+
+              //         <td><strong>Fuel Level</strong></td>
+              //         <td>0%</td>
+              //       </tr>
+              //       <tr>
+
+              //         <td><strong>Mass Air Flow</strong></td>
+              //         <td>0g/s</td>
+              //       </tr>
+
+              //       <tr>
+
+              //         <td><strong>Coolant Temp</strong></td>
+              //         <td>0°C</td>
+              //       </tr>
+              //       <tr>
+
+              //         <td><strong>Vehicle Speed</strong></td>
+              //         <td>0km/h</td>
+              //       </tr>
+              //       <tr>
+
+              //         <td><strong>Throttle Position</strong></td>
+              //         <td>0%</td>
+              //       </tr>
+              //       <tr>
+
+              //         <td><strong>Intake Air Temp</strong></td>
+              //         <td>0°C</td>
+              //       </tr>
+              //     </tbody>
+              //   </Table>
+              // </Row>
+        //       <Row>
+        //         <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM}RPM</Col>
+        //         <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed}km/h</Col>
+        //       </Row>
+        //       <Row>
+        //         <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuel_usage}%</Col>
+        //         <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
+        //       </Row>
+        //       <Row>
+        //         <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
+        //         <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
+        //       </Row>
+        //       <Row>
+        //         <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
+        //       </Row>
+        //     </Col>
+        //     <Row>
+        //       <Col>
+        //         <div className="bg-white p-4 shadow-sm rounded">
+        //           <h4>Fuel Usage</h4>
+        //           <ResponsiveContainer width="100%" height={300}>
+        //             <LineChart data={obdData.fuel_usage}>
+        //               <CartesianGrid strokeDasharray="3 3" />
+        //               <XAxis dataKey="name" />
+        //               <YAxis />
+        //               <Tooltip />
+        //               <Legend />
+        //               <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+        //             </LineChart>
+        //           </ResponsiveContainer>
+        //         </div>
+        //       </Col>
+        //     </Row>
+        //   </Row>
+        // </>
+
+        <Row>
+          <Col>
+          <div className="bg-white p-4 shadow-sm rounded">
+                 <h4>Location</h4>
+
+                 <Form>
+                   <Form.Check
                     type="switch"
                     id="custom-switch"
                     label={checked ? "Live view" : "Historic Data View"}
@@ -190,15 +354,15 @@ const VehicleProfile = () => {
 
               </div>
 
-              <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+              <div className="bg-white p-4 shadow-sm rounded" style={{ height: '450px' }}>
                 <h4>Location</h4>
-                <JourneyMap journey={obdData.jounrey} />
+                <JourneyMap style={{height: '90%'}} journey={obdData.jounrey} />
               </div>
 
               <div className="bg-white p-4 shadow-sm rounded">
                 <h4>Fuel Usage</h4>
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={[{ name: 0, value: 0 }]}>
+                  <LineChart data={obdData.fuel_usage}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
@@ -208,15 +372,17 @@ const VehicleProfile = () => {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            </Col>
-            <Col>
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Dash</h4>
-                <Row>
-                  <Col>
-                    <Speedometer
+          </Col>
+          <Col>
+            <Row>
+             <Col>
+               <div className="bg-white p-4 shadow-sm rounded">
+                 <h4>Dash</h4>
+                 <Row>
+                   <Col>
+                     <Speedometer
                       width={200}
-                      value={0}
+                      value={obdData.vehicleSpeed}
                       fontFamily='squada-one'
                     >
                       <Background />
@@ -243,8 +409,9 @@ const VehicleProfile = () => {
                   </Col>
                 </Row>
               </div>
-
-              <Row>
+              </Col>
+            </Row>
+            <Row>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
@@ -255,159 +422,46 @@ const VehicleProfile = () => {
                   <tbody>
                     <tr>
                       <td><strong>Engine RPM</strong></td>
-                      <td>0 RPM</td>
+                      <td>{obdData.engineRPM} RPM</td>
                     </tr>
                     <tr>
 
                       <td><strong>Fuel Level</strong></td>
-                      <td>0%</td>
+                      <td>{obdData.fuelLevel}%</td>
                     </tr>
                     <tr>
 
                       <td><strong>Mass Air Flow</strong></td>
-                      <td>0g/s</td>
+                      <td>{obdData.massAirFlow}g/s</td>
                     </tr>
 
                     <tr>
 
                       <td><strong>Coolant Temp</strong></td>
-                      <td>0°C</td>
+                      <td>{obdData.coolantTemp}°C</td>
                     </tr>
                     <tr>
 
                       <td><strong>Vehicle Speed</strong></td>
-                      <td>0km/h</td>
+                      <td>{obdData.vehicleSpeed}km/h</td>
                     </tr>
                     <tr>
 
                       <td><strong>Throttle Position</strong></td>
-                      <td>0%</td>
+                      <td>{obdData.throttlePosition}%</td>
                     </tr>
                     <tr>
 
                       <td><strong>Intake Air Temp</strong></td>
-                      <td>0°C</td>
+                      <td>{obdData.massAirFlow}°C</td>
                     </tr>
                   </tbody>
                 </Table>
               </Row>
-              <Row>
-                <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM}RPM</Col>
-                <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed}km/h</Col>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuel_usage}%</Col>
-                <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
-                <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
-              </Row>
-              <Row>
-                <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
-              </Row>
-            </Col>
-            <Row>
-              <Col>
-                <div className="bg-white p-4 shadow-sm rounded">
-                  <h4>Fuel Usage</h4>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={obdData.fuel_usage}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </Col>
-            </Row>
-          </Row>
-        </>
 
-        // <Row>
+          </Col>
 
-        //   <Col className="col-info">
-        //     <Row><Col className="col-info"><strong>Last Login:</strong>  Live</Col></Row>
-
-        //     <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-        //       <JourneyMap journey={obdData.jounrey} />
-        //     </div>
-        //   </Col>
-        //   <Col>
-        //     <Row>
-
-        //       <div className="bg-white p-4 shadow-sm rounded">
-        //         <h4>Dash</h4>
-        //         <Col>
-        //           <Speedometer
-        //             width={190}
-        //             value={obdData.engineRPM}
-        //             fontFamily='squada-one'
-        //           >
-        //             <Background />
-        //             <Arc />
-        //             <Needle />
-        //             <Progress />
-        //             <Marks />
-        //             <Indicator />
-        //           </Speedometer>
-        //         </Col>
-
-        //         <Col>
-        //           <Speedometer
-        //             width={190}
-        //             value={obdData.vehicleSpeed}
-        //             fontFamily='squada-one'
-        //           >
-        //             <Background />
-        //             <Arc />
-        //             <Needle />
-        //             <Progress />
-        //             <Marks />
-        //             <Indicator />
-        //           </Speedometer>
-        //         </Col>
-        //       </div>
-        //     </Row>
-        //     <Row>
-        //       <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM} RPM</Col>
-        //       <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed} km/h</Col>
-        //     </Row>
-        //     <Row>
-        //       <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuelLevel}%</Col>
-        //       <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
-        //     </Row>
-        //     <Row>
-        //       <Col className="col-info"><strong>Mass Air Flow:</strong> {obdData.massAirFlow} g/s</Col>
-        //       <Col className="col-info"><strong>Intake Air Temp:</strong> {obdData.intakeAirTemp}°C</Col>
-        //     </Row>
-        //     <Row>
-        //       <Col className="col-info"><strong>Coolant Temp:</strong> {obdData.coolantTemp}°C</Col>
-        //       {/* <li><strong>Latitude :</strong> {obdData.latitude}°C</li>
-        //       <li><strong>Longitude :</strong> {obdData.longitude}°C</li> */}
-        //     </Row>
-        //   </Col>
-        //   <Row>
-        //     <Col>
-        //       <div className="bg-white p-4 shadow-sm rounded">
-        //         <h4>Fuel Usage</h4>
-        //         <ResponsiveContainer width="100%" height={300}>
-        //           <LineChart data={obdData.fuel_usage}>
-        //             <CartesianGrid strokeDasharray="3 3" />
-        //             <XAxis dataKey="name" />
-        //             <YAxis />
-        //             <Tooltip />
-        //             <Legend />
-        //             <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-        //           </LineChart>
-        //         </ResponsiveContainer>
-        //       </div>
-        //     </Col>
-        //   </Row>
-        // </Row>
+        </Row>
       ) : (
         <>
           <Row>
@@ -560,6 +614,8 @@ const VehicleProfile = () => {
   );
 };
 
+
+
 const fetchAddress = async (lat, lon) => {
   try {
     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
@@ -586,25 +642,41 @@ const UsageEfficiency = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJourney, setSelectedJourney] = useState(null);
-  const itemsPerPage = 15;
+  const itemsPerPage = 5;
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchJourneyData = async () => {
       try {
         const response = await fetch(`https://backseatdriver-ie-api.onrender.com/journeys/${id}`, {
-          // const response = await fetch(`http://localhost:3000/journeys/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
-        if (!response.ok) {
-          throw new Error(`Error fetching journey data: ${response.statusText}`);
-        }
+
+        if (!response.ok) throw new Error(`Error fetching journey data: ${response.statusText}`);
         const data = await response.json();
-        setJourneyData(data);
+
+        const updatedData = await Promise.all(
+          data.map(async (journey) => {
+            const coords = journey.journey_dataset[journey.journey_dataset.length - 1].jounrey;
+            const start = coords[0];
+            const end = coords[coords.length - 1];
+
+            const startAddr = await reverseGeocode(start[0], start[1]);
+            const endAddr = await reverseGeocode(end[0], end[1]);
+
+            return {
+              ...journey,
+              startAddress: startAddr,
+              endAddress: endAddr,
+            };
+          })
+        );
+
+        setJourneyData(updatedData);
       } catch (error) {
         console.error(error);
       }
@@ -616,10 +688,8 @@ const UsageEfficiency = () => {
   }, [id]);
 
   const handleShowModal = (journey) => {
-    console.log(journey);
-    setSelectedJourney(journey.journey_dataset[(journey.journey_dataset.length) - 1].jounrey);
-    console.log(journey.journey_dataset[(journey.journey_dataset.length) - 1].jounrey);
-    // {journeyData?.journey_dataset?.at(-1)?.journey}
+    const coords = journey.journey_dataset[journey.journey_dataset.length - 1].jounrey;
+    setSelectedJourney(coords);
     setShowModal(true);
   };
 
@@ -639,16 +709,29 @@ const UsageEfficiency = () => {
         <>
           <Row className="mb-4">
             <Col>
+              <h1>Vehicle Usage</h1>
+              <CalendarHeatmap
+                values={[
+                  { date: '2025-01-01', count: 1 },
+                  { date: '2025-01-03', count: 4 },
+                  { date: '2025-01-06', count: 2 },
+                ]}
+                classForValue={(value) => {
+                  if (!value) return 'color-empty';
+                  return `color-scale-${value.count}`;
+                }}
+              />
+            </Col>
+            <Col>
               <div className="bg-white p-4 shadow-sm rounded">
                 <h4>Your Journeys</h4>
                 <ListGroup>
                   {currentItems.map((journey) => (
                     <ListGroup.Item key={journey.journey_id}>
-                      Journey from {journey.journey_dataset[journey.journey_dataset.length - 1].jounrey[0].toString()} to
-                      {journey.journey_dataset[journey.journey_dataset.length - 1].jounrey[journey.journey_dataset[journey.journey_dataset.length - 1].jounrey[3].length - 1].toString()} <br />
-                      {/* Journey ID: {journey.journey_id} */}
-                      Duration : {journey.journey_duration}
+                      Journey from <strong>{journey.startAddress}</strong> to <strong>{journey.endAddress}</strong> <br />
+                      Duration: {journey.journeyDuration}
                       <Button
+                        style={{ background: 'rgb(74, 28, 111)' }}
                         variant="primary"
                         className="ms-2"
                         onClick={() => handleShowModal(journey)}
@@ -687,32 +770,15 @@ const UsageEfficiency = () => {
               <Modal.Title>Journey Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <h5>{journeyData.journey_duration}</h5>
-              {journeyData && (
-                <>
-                  <ListGroup>
-                    <ListGroup.Item>{journeyData.journey_duration}</ListGroup.Item>
-                    {/* <ListGroup.Item>Route: {selectedJourney}</ListGroup.Item> */}
-                    {/* <ListGroup.Item>Distance: {selectedJourney.journey_dataset.distance_km} km</ListGroup.Item>
-                    <ListGroup.Item>Duration: {selectedJourney.journey_dataset.duration_min} min</ListGroup.Item>
-                    <ListGroup.Item>Start Time: {new Date(selectedJourney.journey_start_time).toLocaleString()}</ListGroup.Item> */}
-                  </ListGroup>
-                  {/* {selectedJourney && ( */}
-                  <MapContainer
-                    center={[53.34804851027272, -6.253359479333355]}
-                    zoom={13}
-                    style={{ height: '400px', width: '100%', marginTop: '20px' }}
-                  >
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Polyline
-                      positions={selectedJourney}
-                      color="blue"
-                    />
-                  </MapContainer>
-                  {/* )} */}
-                </>
+              {selectedJourney && (
+                <MapContainer
+                  center={selectedJourney[0]}
+                  zoom={13}
+                  style={{ height: '400px', width: '100%', marginTop: '20px' }}
+                >
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <Polyline positions={selectedJourney} color="blue" />
+                </MapContainer>
               )}
             </Modal.Body>
             <Modal.Footer>
@@ -725,14 +791,15 @@ const UsageEfficiency = () => {
       ) : (
         <Row>
           <Col>
-            <div className="bg-white p-4 shadow-sm rounded"><h4>No Journeys for this vehicle available.</h4></div>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>No Journeys for this vehicle available.</h4>
+            </div>
           </Col>
         </Row>
       )}
     </Container>
   );
 };
-
 
 
 function Safety() {
