@@ -30,10 +30,11 @@ const Sidebar = ({ setActiveView }) => {
       <ul className="sidebar-nav">
         <li className="nav-item">
           <button className="btn btn-link sidebarLink" onClick={() => setActiveView('vehicleProfile')}>
-            <MDBIcon fas icon="car" /> {/* Vehicle icon */}
-            {isHovered && <small>Vehicle Profile</small>}
+            <MDBIcon fas icon="fas fa-bolt" /> {/* Vehicle icon */}
+            {isHovered && <small>Live Data</small>}
           </button>
         </li>
+        <hr></hr>
         <li className="nav-item">
           <button className="btn btn-link sidebarLink" onClick={() => setActiveView('usageEfficiency')}>
             <MDBIcon fas icon="chart-line" /> {/* Usage/Efficiency icon */}
@@ -48,8 +49,8 @@ const Sidebar = ({ setActiveView }) => {
         </li>
         <li className="nav-item">
           <button className="btn btn-link sidebarLink" onClick={() => setActiveView('wiki')}>
-            <MDBIcon fas icon="book" /> {/* Wiki icon */}
-            {isHovered && <small>BackSeatDriver Wiki</small>}
+            <MDBIcon fas icon="fas fa-brain" /> {/* Wiki icon */}
+            {isHovered && <small>BackSeatDriver AI Client</small>}
           </button>
         </li>
         <button className="btn btn-danger mt-3" onClick={handleLogout}>

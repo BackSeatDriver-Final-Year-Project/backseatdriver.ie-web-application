@@ -86,30 +86,29 @@ const randomValues = getRange(200).map(index => {
   };
 });
 
-// const vehicleData = {
-//   make: 'Toyota',
-//   model: 'Corolla',
-//   year: '2020',
-//   fuelType: 'Petrol',
-//   mileage: '50,000 km',
-//   fuelEfficiency: '15 km/L',
-//   engineHealth: 'Good',
-//   tirePressure: 'Optimal',
-//   engineHealthScore: 85,
-//   trips: [
-//     { date: '2024-11-15', distance: '120 km', fuelUsed: '8 L' },
-//     { date: '2024-11-14', distance: '90 km', fuelUsed: '6 L' },
-//   ],
-// };
+// Custom icon
+const customIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+  iconSize: [25, 25],
+  iconAnchor: [12, 25],
+  popupAnchor: [1, -34],
+});
+
 
 const JourneyMap = ({ journey }) => {
   return (
     <MapContainer center={journey[0]} zoom={13} style={{ width: '100%', height: '100%' }}>
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       {/* Draw the journey on the map */}
+      <Marker position={journey[0]} icon={customIcon}>
+        <Popup>Start Point</Popup>
+      </Marker>
+
+      {/* <Marker position={endPoint} icon={customIcon}>
+        <Popup>End Point</Popup>
+      </Marker> */}
       <Polyline positions={journey} color="blue" />
     </MapContainer>
   );
@@ -205,19 +204,19 @@ const VehicleProfile = () => {
         //         <JourneyMap journey={obdData.jounrey} />
         //       </div> here
 
-              // <div className="bg-white p-4 shadow-sm rounded">
-              //   <h4>Fuel Usage</h4>
-              //   <ResponsiveContainer width="100%" height={300}>
-              //     <LineChart data={[{ name: 0, value: 0 }]}>
-              //       <CartesianGrid strokeDasharray="3 3" />
-              //       <XAxis dataKey="name" />
-              //       <YAxis />
-              //       <Tooltip />
-              //       <Legend />
-              //       <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-              //     </LineChart>
-              //   </ResponsiveContainer>
-              // </div> here
+        // <div className="bg-white p-4 shadow-sm rounded">
+        //   <h4>Fuel Usage</h4>
+        //   <ResponsiveContainer width="100%" height={300}>
+        //     <LineChart data={[{ name: 0, value: 0 }]}>
+        //       <CartesianGrid strokeDasharray="3 3" />
+        //       <XAxis dataKey="name" />
+        //       <YAxis />
+        //       <Tooltip />
+        //       <Legend />
+        //       <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+        //     </LineChart>
+        //   </ResponsiveContainer>
+        // </div> here
         //     </Col>
         //     <Col>
         //       <div className="bg-white p-4 shadow-sm rounded">
@@ -254,53 +253,53 @@ const VehicleProfile = () => {
         //         </Row>
         //       </div>
 
-              // <Row>
-              //   <Table striped bordered hover>
-              //     <thead>
-              //       <tr>
-              //         <th>Signal</th>
-              //         <th>Value</th>
-              //       </tr>
-              //     </thead>
-              //     <tbody>
-              //       <tr>
-              //         <td><strong>Engine RPM</strong></td>
-              //         <td>0 RPM</td>
-              //       </tr>
-              //       <tr>
+        // <Row>
+        //   <Table striped bordered hover>
+        //     <thead>
+        //       <tr>
+        //         <th>Signal</th>
+        //         <th>Value</th>
+        //       </tr>
+        //     </thead>
+        //     <tbody>
+        //       <tr>
+        //         <td><strong>Engine RPM</strong></td>
+        //         <td>0 RPM</td>
+        //       </tr>
+        //       <tr>
 
-              //         <td><strong>Fuel Level</strong></td>
-              //         <td>0%</td>
-              //       </tr>
-              //       <tr>
+        //         <td><strong>Fuel Level</strong></td>
+        //         <td>0%</td>
+        //       </tr>
+        //       <tr>
 
-              //         <td><strong>Mass Air Flow</strong></td>
-              //         <td>0g/s</td>
-              //       </tr>
+        //         <td><strong>Mass Air Flow</strong></td>
+        //         <td>0g/s</td>
+        //       </tr>
 
-              //       <tr>
+        //       <tr>
 
-              //         <td><strong>Coolant Temp</strong></td>
-              //         <td>0°C</td>
-              //       </tr>
-              //       <tr>
+        //         <td><strong>Coolant Temp</strong></td>
+        //         <td>0°C</td>
+        //       </tr>
+        //       <tr>
 
-              //         <td><strong>Vehicle Speed</strong></td>
-              //         <td>0km/h</td>
-              //       </tr>
-              //       <tr>
+        //         <td><strong>Vehicle Speed</strong></td>
+        //         <td>0km/h</td>
+        //       </tr>
+        //       <tr>
 
-              //         <td><strong>Throttle Position</strong></td>
-              //         <td>0%</td>
-              //       </tr>
-              //       <tr>
+        //         <td><strong>Throttle Position</strong></td>
+        //         <td>0%</td>
+        //       </tr>
+        //       <tr>
 
-              //         <td><strong>Intake Air Temp</strong></td>
-              //         <td>0°C</td>
-              //       </tr>
-              //     </tbody>
-              //   </Table>
-              // </Row>
+        //         <td><strong>Intake Air Temp</strong></td>
+        //         <td>0°C</td>
+        //       </tr>
+        //     </tbody>
+        //   </Table>
+        // </Row>
         //       <Row>
         //         <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM}RPM</Col>
         //         <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed}km/h</Col>
@@ -339,125 +338,125 @@ const VehicleProfile = () => {
 
         <Row>
           <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-                 <h4>Location</h4>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Location</h4>
 
-                 <Form>
-                   <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label={checked ? "Live view" : "Historic Data View"}
-                    checked={checked}
-                    onChange={handleToggle}
-                  />
-                </Form>
+              <Form>
+                <Form.Check
+                  type="switch"
+                  id="custom-switch"
+                  label={checked ? "Live view" : "Historic Data View"}
+                  checked={checked}
+                  onChange={handleToggle}
+                />
+              </Form>
 
-              </div>
+            </div>
 
-              <div className="bg-white p-4 shadow-sm rounded" style={{ height: '450px' }}>
-                <h4>Location</h4>
-                <JourneyMap style={{height: '90%'}} journey={obdData.jounrey} />
-              </div>
+            <div className="bg-white p-4 shadow-sm rounded" style={{ height: '450px' }}>
+              <h4>Location</h4>
+              <JourneyMap style={{ height: '90%' }} journey={obdData.jounrey} />
+            </div>
 
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Fuel Usage</h4>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={obdData.fuel_usage}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Fuel Usage</h4>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={obdData.fuel_usage}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </Col>
           <Col>
             <Row>
-             <Col>
-               <div className="bg-white p-4 shadow-sm rounded">
-                 <h4>Dash</h4>
-                 <Row>
-                   <Col>
-                     <Speedometer
-                      width={200}
-                      value={obdData.vehicleSpeed}
-                      fontFamily='squada-one'
-                    >
-                      <Background />
-                      <Arc />
-                      <Needle />
-                      <Progress />
-                      <Marks />
-                      <Indicator />
-                    </Speedometer>
-                  </Col>
-                  <Col>
-                    <Speedometer
-                      width={200}
-                      value={0}
-                      fontFamily='squada-one'
-                    >
-                      <Background />
-                      <Arc />
-                      <Needle />
-                      <Progress />
-                      <Marks />
-                      <Indicator />
-                    </Speedometer>
-                  </Col>
-                </Row>
-              </div>
+              <Col>
+                <div className="bg-white p-4 shadow-sm rounded">
+                  <h4>Dash</h4>
+                  <Row>
+                    <Col>
+                      <Speedometer
+                        width={200}
+                        value={obdData.vehicleSpeed}
+                        fontFamily='squada-one'
+                      >
+                        <Background />
+                        <Arc />
+                        <Needle />
+                        <Progress />
+                        <Marks />
+                        <Indicator />
+                      </Speedometer>
+                    </Col>
+                    <Col>
+                      <Speedometer
+                        width={200}
+                        value={0}
+                        fontFamily='squada-one'
+                      >
+                        <Background />
+                        <Arc />
+                        <Needle />
+                        <Progress />
+                        <Marks />
+                        <Indicator />
+                      </Speedometer>
+                    </Col>
+                  </Row>
+                </div>
               </Col>
             </Row>
             <Row>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Signal</th>
-                      <th>Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Engine RPM</strong></td>
-                      <td>{obdData.engineRPM} RPM</td>
-                    </tr>
-                    <tr>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Signal</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Engine RPM</strong></td>
+                    <td>{obdData.engineRPM} RPM</td>
+                  </tr>
+                  <tr>
 
-                      <td><strong>Fuel Level</strong></td>
-                      <td>{obdData.fuelLevel}%</td>
-                    </tr>
-                    <tr>
+                    <td><strong>Fuel Level</strong></td>
+                    <td>{obdData.fuelLevel}%</td>
+                  </tr>
+                  <tr>
 
-                      <td><strong>Mass Air Flow</strong></td>
-                      <td>{obdData.massAirFlow}g/s</td>
-                    </tr>
+                    <td><strong>Mass Air Flow</strong></td>
+                    <td>{obdData.massAirFlow}g/s</td>
+                  </tr>
 
-                    <tr>
+                  <tr>
 
-                      <td><strong>Coolant Temp</strong></td>
-                      <td>{obdData.coolantTemp}°C</td>
-                    </tr>
-                    <tr>
+                    <td><strong>Coolant Temp</strong></td>
+                    <td>{obdData.coolantTemp}°C</td>
+                  </tr>
+                  <tr>
 
-                      <td><strong>Vehicle Speed</strong></td>
-                      <td>{obdData.vehicleSpeed}km/h</td>
-                    </tr>
-                    <tr>
+                    <td><strong>Vehicle Speed</strong></td>
+                    <td>{obdData.vehicleSpeed}km/h</td>
+                  </tr>
+                  <tr>
 
-                      <td><strong>Throttle Position</strong></td>
-                      <td>{obdData.throttlePosition}%</td>
-                    </tr>
-                    <tr>
+                    <td><strong>Throttle Position</strong></td>
+                    <td>{obdData.throttlePosition}%</td>
+                  </tr>
+                  <tr>
 
-                      <td><strong>Intake Air Temp</strong></td>
-                      <td>{obdData.massAirFlow}°C</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Row>
+                    <td><strong>Intake Air Temp</strong></td>
+                    <td>{obdData.massAirFlow}°C</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Row>
 
           </Col>
 
@@ -485,8 +484,10 @@ const VehicleProfile = () => {
                 <h4>Location</h4>
                 <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '90%' }}>
                   <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
+                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                    attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+                  />
                   <Marker position={[37.7749, -122.4194]} icon={customMarker}>
                     <Popup>Vehicle Location</Popup>
                   </Marker>
@@ -710,17 +711,48 @@ const UsageEfficiency = () => {
           <Row className="mb-4">
             <Col>
               <h1>Vehicle Usage</h1>
-              <CalendarHeatmap
-                values={[
-                  { date: '2025-01-01', count: 1 },
-                  { date: '2025-01-03', count: 4 },
-                  { date: '2025-01-06', count: 2 },
-                ]}
-                classForValue={(value) => {
-                  if (!value) return 'color-empty';
-                  return `color-scale-${value.count}`;
-                }}
-              />
+              <div className="bg-white p-4 shadow-sm rounded">
+                <CalendarHeatmap
+                  values={[
+                    { date: '2025-01-01', count: 1 },
+                    { date: '2025-01-03', count: 4 },
+                    { date: '2025-01-06', count: 2 },
+                  ]}
+                  classForValue={(value) => {
+                    if (!value) return 'color-empty';
+                    return `color-scale-${value.count}`;
+                  }}
+                />
+              </div>
+
+              <Row>
+                <Col>
+
+                  <div className="bg-white p-4 shadow-sm rounded">
+                  </div>
+                </Col>
+
+                <Col>
+
+                  <div className="bg-white p-4 shadow-sm rounded">
+                  </div>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+
+                  <div className="bg-white p-4 shadow-sm rounded">
+                  </div>
+                </Col>
+
+                <Col>
+
+                  <div className="bg-white p-4 shadow-sm rounded">
+                  </div>
+                </Col>
+              </Row>
+
             </Col>
             <Col>
               <div className="bg-white p-4 shadow-sm rounded">
@@ -776,8 +808,21 @@ const UsageEfficiency = () => {
                   zoom={13}
                   style={{ height: '400px', width: '100%', marginTop: '20px' }}
                 >
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <TileLayer
+                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                    attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+                  />
                   <Polyline positions={selectedJourney} color="blue" />
+
+                  <Marker position={selectedJourney[0]} icon={customIcon}>
+                    <Popup>Start Point</Popup>
+                  </Marker>
+
+                  <Marker position={selectedJourney[selectedJourney.length - 1]} icon={customIcon}>
+                    <Popup>End Point</Popup>
+                  </Marker>
+
                 </MapContainer>
               )}
             </Modal.Body>
@@ -796,8 +841,9 @@ const UsageEfficiency = () => {
             </div>
           </Col>
         </Row>
-      )}
-    </Container>
+      )
+      }
+    </Container >
   );
 };
 
