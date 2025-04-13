@@ -1,3 +1,21 @@
+small {
+  font-weight: 600;
+}
+
+
+.page-link{
+  color: black!important;
+}
+
+.page-item.active .page-link{
+  color: white!important;
+  background-color: rgb(74, 28, 111)!important;
+}
+
+#inactive-panel{
+  opacity: 0.5;
+}
+
 /* .col{
   border: 1px solid black;
 } */

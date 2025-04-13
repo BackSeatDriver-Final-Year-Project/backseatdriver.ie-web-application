@@ -59,7 +59,7 @@ const reverseGeocode = async (lat, lon) => {
     const data = await response.json();
     return data.results[0]?.formatted || `${lat}, ${lon}`;
   } catch (error) {
-    console.error("Reverse geocode error:", error);
+    console.error("Reverse geocode error:");
     return `${lat}, ${lon}`;
   }
 };
@@ -99,7 +99,10 @@ const JourneyMap = ({ journey }) => {
   return (
     <MapContainer center={journey[0]} zoom={13} style={{ width: '100%', height: '100%' }}>
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+        subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+        attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+      />
 
       {/* Draw the journey on the map */}
       <Marker position={journey[0]} icon={customIcon}>
@@ -181,165 +184,11 @@ const VehicleProfile = () => {
     <Container>
 
       {obdData ? (
-        // <>
-        //   <Row>
-        //     <Col>
-        //       <div className="bg-white p-4 shadow-sm rounded">
-        //         <h4>Location</h4>
-
-        //         <Form>
-        //           <Form.Check
-        //             type="switch"
-        //             id="custom-switch"
-        //             label={checked ? "Live view" : "Historic Data View"}
-        //             checked={checked}
-        //             onChange={handleToggle}
-        //           />
-        //         </Form>
-
-        //       </div>
-
-        //       <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-        //         <h4>Location</h4>
-        //         <JourneyMap journey={obdData.jounrey} />
-        //       </div> here
-
-        // <div className="bg-white p-4 shadow-sm rounded">
-        //   <h4>Fuel Usage</h4>
-        //   <ResponsiveContainer width="100%" height={300}>
-        //     <LineChart data={[{ name: 0, value: 0 }]}>
-        //       <CartesianGrid strokeDasharray="3 3" />
-        //       <XAxis dataKey="name" />
-        //       <YAxis />
-        //       <Tooltip />
-        //       <Legend />
-        //       <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-        //     </LineChart>
-        //   </ResponsiveContainer>
-        // </div> here
-        //     </Col>
-        //     <Col>
-        //       <div className="bg-white p-4 shadow-sm rounded">
-        //         <h4>Dash</h4>
-        //         <Row>
-        //           <Col>
-        //             <Speedometer
-        //               width={200}
-        //               value={0}
-        //               fontFamily='squada-one'
-        //             >
-        //               <Background />
-        //               <Arc />
-        //               <Needle />
-        //               <Progress />
-        //               <Marks />
-        //               <Indicator />
-        //             </Speedometer>
-        //           </Col>
-        //           <Col>
-        //             <Speedometer
-        //               width={200}
-        //               value={0}
-        //               fontFamily='squada-one'
-        //             >
-        //               <Background />
-        //               <Arc />
-        //               <Needle />
-        //               <Progress />
-        //               <Marks />
-        //               <Indicator />
-        //             </Speedometer>
-        //           </Col>
-        //         </Row>
-        //       </div>
-
-        // <Row>
-        //   <Table striped bordered hover>
-        //     <thead>
-        //       <tr>
-        //         <th>Signal</th>
-        //         <th>Value</th>
-        //       </tr>
-        //     </thead>
-        //     <tbody>
-        //       <tr>
-        //         <td><strong>Engine RPM</strong></td>
-        //         <td>0 RPM</td>
-        //       </tr>
-        //       <tr>
-
-        //         <td><strong>Fuel Level</strong></td>
-        //         <td>0%</td>
-        //       </tr>
-        //       <tr>
-
-        //         <td><strong>Mass Air Flow</strong></td>
-        //         <td>0g/s</td>
-        //       </tr>
-
-        //       <tr>
-
-        //         <td><strong>Coolant Temp</strong></td>
-        //         <td>0°C</td>
-        //       </tr>
-        //       <tr>
-
-        //         <td><strong>Vehicle Speed</strong></td>
-        //         <td>0km/h</td>
-        //       </tr>
-        //       <tr>
-
-        //         <td><strong>Throttle Position</strong></td>
-        //         <td>0%</td>
-        //       </tr>
-        //       <tr>
-
-        //         <td><strong>Intake Air Temp</strong></td>
-        //         <td>0°C</td>
-        //       </tr>
-        //     </tbody>
-        //   </Table>
-        // </Row>
-        //       <Row>
-        //         <Col className="col-info"><strong>Engine RPM:</strong> {obdData.engineRPM}RPM</Col>
-        //         <Col className="col-info"><strong>Vehicle Speed:</strong> {obdData.vehicleSpeed}km/h</Col>
-        //       </Row>
-        //       <Row>
-        //         <Col className="col-info"><strong>Fuel Level:</strong> {obdData.fuel_usage}%</Col>
-        //         <Col className="col-info"><strong>Throttle Position:</strong> {obdData.throttlePosition}%</Col>
-        //       </Row>
-        //       <Row>
-        //         <Col className="col-info"><strong>Mass Air Flow:</strong> 0 g/s</Col>
-        //         <Col className="col-info"><strong>Intake Air Temp:</strong> 0°C</Col>
-        //       </Row>
-        //       <Row>
-        //         <Col className="col-info"><strong>Coolant Temp:</strong> 0°C</Col>
-        //       </Row>
-        //     </Col>
-        //     <Row>
-        //       <Col>
-        //         <div className="bg-white p-4 shadow-sm rounded">
-        //           <h4>Fuel Usage</h4>
-        //           <ResponsiveContainer width="100%" height={300}>
-        //             <LineChart data={obdData.fuel_usage}>
-        //               <CartesianGrid strokeDasharray="3 3" />
-        //               <XAxis dataKey="name" />
-        //               <YAxis />
-        //               <Tooltip />
-        //               <Legend />
-        //               <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-        //             </LineChart>
-        //           </ResponsiveContainer>
-        //         </div>
-        //       </Col>
-        //     </Row>
-        //   </Row>
-        // </>
-
         <Row>
           <Col>
             <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Location</h4>
+              <h1>Live Data</h1>
+              <b>Last login:</b> <i></i>
 
               <Form>
                 <Form.Check
@@ -356,6 +205,7 @@ const VehicleProfile = () => {
             <div className="bg-white p-4 shadow-sm rounded" style={{ height: '450px' }}>
               <h4>Location</h4>
               <JourneyMap style={{ height: '90%' }} journey={obdData.jounrey} />
+
             </div>
 
             <div className="bg-white p-4 shadow-sm rounded">
@@ -395,7 +245,7 @@ const VehicleProfile = () => {
                     <Col>
                       <Speedometer
                         width={200}
-                        value={0}
+                        value={obdData.engineRPM}
                         fontFamily='squada-one'
                       >
                         <Background />
@@ -463,136 +313,40 @@ const VehicleProfile = () => {
         </Row>
       ) : (
         <>
-          <Row>
-            <Col>
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Location</h4>
-
-                <Form>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label={checked ? "Live view" : "Historic Data View"}
-                    checked={checked}
-                    onChange={handleToggle}
-                  />
-                </Form>
-
-              </div>
-
-              <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
-                <h4>Location</h4>
-                <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '90%' }}>
-                  <TileLayer
-                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
-                    attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
-                  />
-                  <Marker position={[37.7749, -122.4194]} icon={customMarker}>
-                    <Popup>Vehicle Location</Popup>
-                  </Marker>
-                </MapContainer>
-              </div>
-
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Fuel Usage</h4>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={[{ name: 0, value: 0 }]}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </Col>
-            <Col>
-              <div className="bg-white p-4 shadow-sm rounded">
-                <h4>Dash</h4>
-                <Row>
-                  <Col>
-                    <Speedometer
-                      width={280}
-                      value={0}
-                      fontFamily='squada-one'
-                    >
-                      <Background />
-                      <Arc />
-                      <Needle />
-                      <Progress />
-                      <Marks />
-                      <Indicator />
-                    </Speedometer>
-                  </Col>
-                  <Col>
-                    <Speedometer
-                      width={280}
-                      value={0}
-                      fontFamily='squada-one'
-                    >
-                      <Background />
-                      <Arc />
-                      <Needle />
-                      <Progress />
-                      <Marks />
-                      <Indicator />
-                    </Speedometer>
-                  </Col>
-                </Row>
-              </div>
-
-              <Row>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Signal</th>
-                      <th>Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Engine RPM</strong></td>
-                      <td>0 RPM</td>
-                    </tr>
-                    <tr>
-
-                      <td><strong>Fuel Level</strong></td>
-                      <td>0%</td>
-                    </tr>
-                    <tr>
-
-                      <td><strong>Mass Air Flow</strong></td>
-                      <td>0g/s</td>
-                    </tr>
-
-                    <tr>
-
-                      <td><strong>Coolant Temp</strong></td>
-                      <td>0°C</td>
-                    </tr>
-                    <tr>
-
-                      <td><strong>Vehicle Speed</strong></td>
-                      <td>0km/h</td>
-                    </tr>
-                    <tr>
-
-                      <td><strong>Throttle Position</strong></td>
-                      <td>0%</td>
-                    </tr>
-                    <tr>
-
-                      <td><strong>Intake Air Temp</strong></td>
-                      <td>0°C</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Row>
-            </Col>
+          <div id="inactive-panel">
             <Row>
               <Col>
+                <h1>Live Data</h1>
+                <div className="bg-white p-4 shadow-sm rounded">
+
+                  <b>Last login:</b> <i></i>
+
+                  <Form>
+                    <Form.Check
+                      type="switch"
+                      id="custom-switch"
+                      label={checked ? "Live view" : "Historic Data View"}
+                      checked={checked}
+                      onChange={handleToggle}
+                    />
+                  </Form>
+
+                </div>
+
+                <div className="bg-white p-4 shadow-sm rounded" style={{ height: '400px' }}>
+                  <h4>Location</h4>
+                  <MapContainer center={[37.7749, -122.4194]} zoom={13} style={{ width: '100%', height: '90%' }}>
+                    <TileLayer
+                      url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                      subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                      attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+                    />
+                    <Marker position={[37.7749, -122.4194]} icon={customMarker}>
+                      <Popup>Vehicle Location</Popup>
+                    </Marker>
+                  </MapContainer>
+                </div>
+
                 <div className="bg-white p-4 shadow-sm rounded">
                   <h4>Fuel Usage</h4>
                   <ResponsiveContainer width="100%" height={300}>
@@ -607,8 +361,108 @@ const VehicleProfile = () => {
                   </ResponsiveContainer>
                 </div>
               </Col>
+              <Col>
+                <div className="bg-white p-4 shadow-sm rounded">
+                  <h4>Dash</h4>
+                  <Row>
+                    <Col>
+                      <Speedometer
+                        width={280}
+                        value={0}
+                        fontFamily='squada-one'
+                      >
+                        <Background />
+                        <Arc />
+                        <Needle />
+                        <Progress />
+                        <Marks />
+                        <Indicator />
+                      </Speedometer>
+                    </Col>
+                    <Col>
+                      <Speedometer
+                        width={280}
+                        value={0}
+                        fontFamily='squada-one'
+                      >
+                        <Background />
+                        <Arc />
+                        <Needle />
+                        <Progress />
+                        <Marks />
+                        <Indicator />
+                      </Speedometer>
+                    </Col>
+                  </Row>
+                </div>
+
+                <Row>
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Signal</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>Engine RPM</strong></td>
+                        <td>0 RPM</td>
+                      </tr>
+                      <tr>
+
+                        <td><strong>Fuel Level</strong></td>
+                        <td>0%</td>
+                      </tr>
+                      <tr>
+
+                        <td><strong>Mass Air Flow</strong></td>
+                        <td>0g/s</td>
+                      </tr>
+
+                      <tr>
+
+                        <td><strong>Coolant Temp</strong></td>
+                        <td>0°C</td>
+                      </tr>
+                      <tr>
+
+                        <td><strong>Vehicle Speed</strong></td>
+                        <td>0km/h</td>
+                      </tr>
+                      <tr>
+
+                        <td><strong>Throttle Position</strong></td>
+                        <td>0%</td>
+                      </tr>
+                      <tr>
+
+                        <td><strong>Intake Air Temp</strong></td>
+                        <td>0°C</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Row>
+              </Col>
+              <Row>
+                <Col>
+                  <div className="bg-white p-4 shadow-sm rounded">
+                    <h4>Fuel Usage</h4>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={[{ name: 0, value: 0 }]}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </Col>
+              </Row>
             </Row>
-          </Row>
+          </div>
         </>
       )}
     </Container>
@@ -704,13 +558,15 @@ const UsageEfficiency = () => {
 
   const totalPages = journeyData ? Math.ceil(journeyData.length / itemsPerPage) : 1;
 
+  console.log(journeyData);
+
   return (
     <Container>
+      <h1>Vehicle Usage</h1>
       {journeyData ? (
         <>
           <Row className="mb-4">
             <Col>
-              <h1>Vehicle Usage</h1>
               <div className="bg-white p-4 shadow-sm rounded">
                 <CalendarHeatmap
                   values={[
@@ -729,12 +585,16 @@ const UsageEfficiency = () => {
                 <Col>
 
                   <div className="bg-white p-4 shadow-sm rounded">
+                    <small>TOTAL JOURNEYS</small><br />
+                    <h1>10</h1>
                   </div>
                 </Col>
 
                 <Col>
 
                   <div className="bg-white p-4 shadow-sm rounded">
+                    <small>TOTAL DISTANCE TRAVELLED (KM)</small><br />
+                    <h1>10</h1>
                   </div>
                 </Col>
               </Row>
@@ -743,14 +603,36 @@ const UsageEfficiency = () => {
                 <Col>
 
                   <div className="bg-white p-4 shadow-sm rounded">
+                    <small>AVERAGE ECO SCORE</small><br />
+                    <h1>10</h1>
                   </div>
                 </Col>
 
                 <Col>
 
                   <div className="bg-white p-4 shadow-sm rounded">
+                    <small>AVERAGE JOURNEY DURATION</small><br />
+                    <h1>10</h1>
                   </div>
                 </Col>
+              </Row>
+
+              <Row>
+                <Col>
+
+                  <div className="bg-white p-4 shadow-sm rounded">
+                    <small>DAYS ACTIVE</small><br />
+                    <h1>10</h1>
+                  </div>
+                </Col>
+
+                {/* <Col>
+
+                  <div className="bg-white p-4 shadow-sm rounded">
+                    <small>TOTAL JOURNEYS</small><br />
+                    <h1>10</h1>
+                  </div>
+                </Col> */}
               </Row>
 
             </Col>
@@ -761,7 +643,8 @@ const UsageEfficiency = () => {
                   {currentItems.map((journey) => (
                     <ListGroup.Item key={journey.journey_id}>
                       Journey from <strong>{journey.startAddress}</strong> to <strong>{journey.endAddress}</strong> <br />
-                      Duration: {journey.journeyDuration}
+                      Duration: {journey.journeyDuration} <br/>
+                      Date:  <br/>
                       <Button
                         style={{ background: 'rgb(74, 28, 111)' }}
                         variant="primary"
@@ -836,9 +719,7 @@ const UsageEfficiency = () => {
       ) : (
         <Row>
           <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>No Journeys for this vehicle available.</h4>
-            </div>
+            <small>Loading...</small>
           </Col>
         </Row>
       )
@@ -851,21 +732,24 @@ const UsageEfficiency = () => {
 function Safety() {
   return (
     <>
-      <Row className="mb-4">
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Safety Overview</h4>
+      <Container>
+        <Row className="mb-4">
+          <Col>
+            <h1>Vehicle Safety</h1>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Safety Overview</h4>
 
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Safety Tips</h4>
-          </div>
-        </Col>
-      </Row>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Safety Tips</h4>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }
@@ -873,30 +757,33 @@ function Safety() {
 function Wiki() {
   return (
     <>
-      <Row className="mb-4">
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Wiki</h4>
-            <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Chat with Our Bot</h4>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Control type="text" placeholder="Type your question here..." />
-              </Form.Group>
-              <Button variant="primary">Send</Button>
-            </Form>
-            <div className="mt-3">
-              {/* <p><strong>Bot:</strong> How can I help you today?</p> */}
+      <Container>
+        <Row className="mb-4">
+          <Col>
+            <h1>Wiki</h1>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Chat with Our Bot</h4>
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Control type="text" placeholder="Type your question here..." />
+                </Form.Group>
+                <Button variant="primary">Send</Button>
+              </Form>
+              <div className="mt-3">
+                {/* <p><strong>Bot:</strong> How can I help you today?</p> */}
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }

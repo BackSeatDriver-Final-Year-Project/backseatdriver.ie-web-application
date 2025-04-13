@@ -1,3 +1,17 @@
+.sidebarLink.active {
+  outline:none;
+  border-right: 4px solid white;/*#007bff; /* little blue accent bar */
+  color: white !important;
+  font-weight: bold;
+  width: 100%;
+  font-size: 20px;
+}
+
+.sidebarLink{
+  outline:none;
+}
+
+
 .sidebarLink{
   color: white!important;
   outline: none;
