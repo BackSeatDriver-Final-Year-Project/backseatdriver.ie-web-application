@@ -7,6 +7,8 @@ import config from "./config";
 import MessageParser from "./MessageParser";
 import ActionProvider from "./ActionProvider";
 
+import './chatbot.css';
+
 function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
 

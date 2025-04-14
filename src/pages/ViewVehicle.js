@@ -12,6 +12,7 @@ import { io } from 'socket.io-client';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import L from 'leaflet';
 import Modal from 'react-bootstrap/Modal';
+import { Chart } from "react-google-charts";
 
 
 import ChatbotWidget from "../chatbot/chatbot";
@@ -588,6 +589,22 @@ const UsageEfficiency = () => {
 
   const totalPages = journeyData ? Math.ceil(journeyData.length / itemsPerPage) : 1;
 
+
+  // Pie chart data
+
+  const data = [
+    ["Speed", "seconds counter"],
+    ["idle time (not moving)", 9],
+    ["1-10kmph", 2],
+    ["11-20kmph", 2],
+    ["21-50kmph", 2],
+    ["51-80kmph", 7],
+  ];
+
+  const options = {
+    title: "Travelling Speed",
+  };
+
   return (
     <Container>
       <h1>Vehicle Usage</h1>
@@ -614,7 +631,6 @@ const UsageEfficiency = () => {
 
               <Row>
                 <Col>
-
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>TOTAL JOURNEYS</small><br />
                     <h1>{journeyInfoData['totalJourneys'][0]['total_journeys'] ?? ''}</h1>
@@ -668,6 +684,14 @@ const UsageEfficiency = () => {
 
             </Col>
             <Col>
+              <Chart
+                chartType="PieChart"
+                data={data}
+                options={options}
+                width={"100%"}
+                height={"300px"}
+              />
+
               <div className="bg-white p-4 shadow-sm rounded">
                 <h4>Your Journeys</h4>
                 <ListGroup>
@@ -767,17 +791,43 @@ function Safety() {
         <Row className="mb-4">
           <Col>
             <h1>Vehicle Safety</h1>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Safety Overview</h4>
-
-            </div>
           </Col>
         </Row>
         <Row>
           <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Safety Tips</h4>
-            </div>
+          <div className="bg-white p-4 shadow-sm rounded">
+            <h4>Safety Grade</h4>
+            <Speedometer
+              value={40}
+              max={100}
+              angle={360}
+              lineCap="round"
+              accentColor="orange">
+              <Arc arcWidth={40} />
+              <Progress arcWidth={40} />
+              <Indicator>
+                {(value, textProps) => (
+                  // <Text
+                  //   {...textProps}
+                  //   fontSize={60}
+                  //   fill="orange"
+                  //   x={center}
+                  //   y={center + 10}
+                  //   textAnchor="middle"
+                  //   alignmentBaseline="middle"
+                  // >
+                  { value } %
+                  {/* </Text> */ }
+                )}
+              </Indicator>
+            </Speedometer>
+          </div>
+          </Col>
+
+          <Col>
+          <div className="bg-white p-4 shadow-sm rounded">
+
+          </div>
           </Col>
         </Row>
       </Container>
@@ -863,7 +913,7 @@ function ViewVehicle() {
 
   return (
     <main className="App">
-      <ChatbotWidget/>
+      <ChatbotWidget />
       <div className="d-flex">
         <Sidebar setActiveView={setActiveView} />
         <Container className="flex-grow-1">{renderView()}</Container>

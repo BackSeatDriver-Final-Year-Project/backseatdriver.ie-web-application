@@ -1,0 +1,7 @@
+ .rounded-circle{
+    background: linear-gradient(to bottom, #2d0b4a, #4a1c6f);
+}
+
+.react-chatbot-kit-chat-bot-message{
+    background-color: #4a1c6f!important;
+}
