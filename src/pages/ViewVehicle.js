@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import CalendarHeatmap from 'react-calendar-heatmap';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar';
 import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button, Pagination } from 'react-bootstrap';
@@ -11,6 +13,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import L from 'leaflet';
 import Modal from 'react-bootstrap/Modal';
 
+
+import ChatbotWidget from "../chatbot/chatbot";
 
 import Speedometer, {
   Background,
@@ -494,6 +498,7 @@ const fetchAddress = async (lat, lon) => {
 const UsageEfficiency = () => {
   const { id } = useParams();
   const [journeyData, setJourneyData] = useState(null);
+  const [journeyInfoData, setJourneyInfoData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJourney, setSelectedJourney] = useState(null);
@@ -513,10 +518,13 @@ const UsageEfficiency = () => {
 
         if (!response.ok) throw new Error(`Error fetching journey data: ${response.statusText}`);
         const data = await response.json();
+        console.log(data);
 
         const updatedData = await Promise.all(
           data.map(async (journey) => {
-            const coords = journey.journey_dataset[journey.journey_dataset.length - 1].jounrey;
+            const coords = journey.journey_dataset.jounrey;//[journey.journey_dataset.length - 1]//.jounrey;
+            console.log(journey);
+            console.log(coords);
             const start = coords[0];
             const end = coords[coords.length - 1];
 
@@ -537,13 +545,35 @@ const UsageEfficiency = () => {
       }
     };
 
+    const fetchVehicleInfoData = async () => {
+      try {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicle-summary/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) throw new Error(`Error fetching journey data: ${response.statusText}`);
+        const data = await response.json();
+
+        console.log(data);
+        setJourneyInfoData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     if (id) {
       fetchJourneyData();
+      fetchVehicleInfoData();
     }
   }, [id]);
 
   const handleShowModal = (journey) => {
-    const coords = journey.journey_dataset[journey.journey_dataset.length - 1].jounrey;
+    const coords = journey.journey_dataset.jounrey;//[journey.journey_dataset.length - 1];
+    console.log('Pay attentiont to :' + coords);
     setSelectedJourney(coords);
     setShowModal(true);
   };
@@ -558,8 +588,6 @@ const UsageEfficiency = () => {
 
   const totalPages = journeyData ? Math.ceil(journeyData.length / itemsPerPage) : 1;
 
-  console.log(journeyData);
-
   return (
     <Container>
       <h1>Vehicle Usage</h1>
@@ -569,16 +597,19 @@ const UsageEfficiency = () => {
             <Col>
               <div className="bg-white p-4 shadow-sm rounded">
                 <CalendarHeatmap
-                  values={[
-                    { date: '2025-01-01', count: 1 },
-                    { date: '2025-01-03', count: 4 },
-                    { date: '2025-01-06', count: 2 },
-                  ]}
+                  values={journeyInfoData.calendarHeatmap ?? []}
                   classForValue={(value) => {
                     if (!value) return 'color-empty';
                     return `color-scale-${value.count}`;
                   }}
+                  tooltipDataAttrs={(value) => {
+                    if (!value || !value.date) return null;
+                    return {
+                      'data-tip': `${value.date} — ${value.count} journeys`,
+                    };
+                  }}
                 />
+                <ReactTooltip />
               </div>
 
               <Row>
@@ -586,7 +617,7 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>TOTAL JOURNEYS</small><br />
-                    <h1>10</h1>
+                    <h1>{journeyInfoData['totalJourneys'][0]['total_journeys'] ?? ''}</h1>
                   </div>
                 </Col>
 
@@ -594,7 +625,7 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>TOTAL DISTANCE TRAVELLED (KM)</small><br />
-                    <h1>10</h1>
+                    <h1>~</h1>
                   </div>
                 </Col>
               </Row>
@@ -604,7 +635,7 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>AVERAGE ECO SCORE</small><br />
-                    <h1>10</h1>
+                    <h1>~</h1>
                   </div>
                 </Col>
 
@@ -612,7 +643,7 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>AVERAGE JOURNEY DURATION</small><br />
-                    <h1>10</h1>
+                    <h1>{journeyInfoData['averageDurationMinutes'][0]['avg_duration_minutes'] ?? ''}</h1>
                   </div>
                 </Col>
               </Row>
@@ -622,7 +653,7 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>DAYS ACTIVE</small><br />
-                    <h1>10</h1>
+                    <h1>{journeyInfoData['activeDays'][0]['active_days'] ?? ''}</h1>
                   </div>
                 </Col>
 
@@ -641,12 +672,12 @@ const UsageEfficiency = () => {
                 <h4>Your Journeys</h4>
                 <ListGroup>
                   {currentItems.map((journey) => (
-                    <ListGroup.Item key={journey.journey_id}>
+                    <ListGroup.Item key={journey.journey_id ?? ''}>
                       Journey from <strong>{journey.startAddress}</strong> to <strong>{journey.endAddress}</strong> <br />
-                      Duration: {journey.journeyDuration} <br/>
-                      Date:  <br/>
+                      Duration: {journey.journeyDuration ?? ''} <br />
+                      Date:  <br />
                       <Button
-                        style={{ background: 'rgb(74, 28, 111)' }}
+                        style={{ background: 'rgb(74, 28, 111)', float: 'right' }}
                         variant="primary"
                         className="ms-2"
                         onClick={() => handleShowModal(journey)}
@@ -759,8 +790,26 @@ function Wiki() {
     <>
       <Container>
         <Row className="mb-4">
+          <h1>Back Seat Driver AI Client</h1>
           <Col>
-            <h1>Wiki</h1>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
+            </div>
+          </Col>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
+            </div>
+          </Col>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
+            </div>
+          </Col>
+          <Col>
             <div className="bg-white p-4 shadow-sm rounded">
               <h4>Wiki</h4>
               <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
@@ -770,6 +819,8 @@ function Wiki() {
         <Row>
           <Col>
             <div className="bg-white p-4 shadow-sm rounded">
+              <div className="container mt-5">
+              </div>
               <h4>Chat with Our Bot</h4>
               <Form>
                 <Form.Group className="mb-3">
@@ -812,6 +863,7 @@ function ViewVehicle() {
 
   return (
     <main className="App">
+      <ChatbotWidget/>
       <div className="d-flex">
         <Sidebar setActiveView={setActiveView} />
         <Container className="flex-grow-1">{renderView()}</Container>
