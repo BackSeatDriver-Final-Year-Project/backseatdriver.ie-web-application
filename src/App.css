@@ -1,18 +1,22 @@
+button:focus {
+  outline: 0;
+}
+
 small {
   font-weight: 600;
 }
 
 
-.page-link{
-  color: black!important;
+.page-link {
+  color: black !important;
 }
 
-.page-item.active .page-link{
-  color: white!important;
-  background-color: rgb(74, 28, 111)!important;
+.page-item.active .page-link {
+  color: white !important;
+  background-color: rgb(74, 28, 111) !important;
 }
 
-#inactive-panel{
+#inactive-panel {
   opacity: 0.5;
 }
 
@@ -20,9 +24,10 @@ small {
   border: 1px solid black;
 } */
 
-body{
+body {
   background-color: whitesmoke;
 }
+
 /* 
 .flex-grow-1 {
   height:100%!important;
@@ -44,34 +49,39 @@ body{
   pointer-events: none; 
 } */
 
-.container, .container-lg, .container-md, .container-sm, .container-xl{
-  max-width: 95%!important;
-  width: 95%!important;
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  max-width: 95% !important;
+  width: 95% !important;
 }
 
 .container {
-  width: 95%!important;
+  width: 95% !important;
 }
 
-.btn-link{
-  color: blue!important;;
+.btn-link {
+  color: blue !important;
+  ;
 }
 
 .fas {
-  color:white!important;
+  color: white !important;
   font-size: 23px;
 }
 
-.btn-danger{
+.btn-danger {
   bottom: 5px;
-    position: absolute;
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
+  position: absolute;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
-.bg-white{
-  margin:5px;
+.bg-white {
+  margin: 5px;
 }
 
 /* .bg-white .col{
@@ -107,6 +117,7 @@ body{
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

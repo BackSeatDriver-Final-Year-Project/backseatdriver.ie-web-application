@@ -5,3 +5,12 @@
 .react-chatbot-kit-chat-bot-message{
     background-color: #4a1c6f!important;
 }
+
+.react-chatbot-kit-chat-btn-send{
+    background-color: #4a1c6f!important;
+}
+
+.react-chatbot-kit-chat-inner-container{
+    width: 350px;
+    height: 450px;
+}

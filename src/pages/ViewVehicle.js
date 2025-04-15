@@ -13,10 +13,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import L from 'leaflet';
 import Modal from 'react-bootstrap/Modal';
 import { Chart } from "react-google-charts";
-
-
 import ChatbotWidget from "../chatbot/chatbot";
-
 import Speedometer, {
   Background,
   Arc,
@@ -26,6 +23,7 @@ import Speedometer, {
   Indicator,
   DangerPath,
 } from 'react-speedometer';
+// import Form from 'react-bootstrap/Form';
 
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
 // const socket = io('http://localhost:3000'); // Replace with your actual API endpoint
@@ -795,39 +793,39 @@ function Safety() {
         </Row>
         <Row>
           <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
-            <h4>Safety Grade</h4>
-            <Speedometer
-              value={40}
-              max={100}
-              angle={360}
-              lineCap="round"
-              accentColor="orange">
-              <Arc arcWidth={40} />
-              <Progress arcWidth={40} />
-              <Indicator>
-                {(value, textProps) => (
-                  // <Text
-                  //   {...textProps}
-                  //   fontSize={60}
-                  //   fill="orange"
-                  //   x={center}
-                  //   y={center + 10}
-                  //   textAnchor="middle"
-                  //   alignmentBaseline="middle"
-                  // >
-                  { value } %
-                  {/* </Text> */ }
-                )}
-              </Indicator>
-            </Speedometer>
-          </div>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Safety Grade</h4>
+              <Speedometer
+                value={40}
+                max={100}
+                angle={360}
+                lineCap="round"
+                accentColor="orange">
+                <Arc arcWidth={40} />
+                <Progress arcWidth={40} />
+                <Indicator>
+                  {(value, textProps) => (
+                    // <Text
+                    //   {...textProps}
+                    //   fontSize={60}
+                    //   fill="orange"
+                    //   x={center}
+                    //   y={center + 10}
+                    //   textAnchor="middle"
+                    //   alignmentBaseline="middle"
+                    // >
+                    { value } %
+                    {/* </Text> */ }
+                  )}
+                </Indicator>
+              </Speedometer>
+            </div>
           </Col>
 
           <Col>
-          <div className="bg-white p-4 shadow-sm rounded">
+            <div className="bg-white p-4 shadow-sm rounded">
 
-          </div>
+            </div>
           </Col>
         </Row>
       </Container>
@@ -840,47 +838,39 @@ function Wiki() {
     <>
       <Container>
         <Row className="mb-4">
-          <h1>Back Seat Driver AI Client</h1>
           <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Wiki</h4>
-              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
-            </div>
-          </Col>
-          <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Wiki</h4>
-              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
-            </div>
-          </Col>
-          <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Wiki</h4>
-              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
-            </div>
-          </Col>
-          <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Wiki</h4>
-              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
-            </div>
+            <h1>Back Seat Driver AI Client</h1>
+            <Form.Select aria-label="show prediction over next ">
+              <option>Open this select menu</option>
+              <option value="1 week">1 Week</option>
+              <option value="1 month">1 Month</option>
+              <option value="1 year">1 Year</option>
+            </Form.Select>
           </Col>
         </Row>
         <Row>
           <Col>
             <div className="bg-white p-4 shadow-sm rounded">
-              <div className="container mt-5">
-              </div>
-              <h4>Chat with Our Bot</h4>
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Control type="text" placeholder="Type your question here..." />
-                </Form.Group>
-                <Button variant="primary">Send</Button>
-              </Form>
-              <div className="mt-3">
-                {/* <p><strong>Bot:</strong> How can I help you today?</p> */}
-              </div>
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
+            </div>
+          </Col>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
+            </div>
+          </Col>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
+            </div>
+          </Col>
+          <Col>
+            <div className="bg-white p-4 shadow-sm rounded">
+              <h4>Wiki</h4>
+              <p>Here you can find detailed articles about vehicle telematics, safety, and efficiency.</p>
             </div>
           </Col>
         </Row>
