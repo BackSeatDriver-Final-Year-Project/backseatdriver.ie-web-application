@@ -28,7 +28,8 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@147.182.249.143 << 'EOF'
           set -e
           cd ../var/www/gci/backseatdriver-root
-          git pull origin main
+          git fetch origin
+          git reset --hard origin/main
           npm install --force
           npm run build
           pm2 delete backseatdriver || true
