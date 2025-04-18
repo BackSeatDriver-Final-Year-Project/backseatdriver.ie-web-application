@@ -1,3 +1,55 @@
+.crash_report_card small{
+  font-variant: all-petite-caps;
+}
+
+.moderate_crash_report_card{
+  background: linear-gradient(to bottom, #ff7a00 0%, #e65c00 50%, #b34700 100%);
+  height: 100%;
+  /* linear-gradient(to bottom, #ff4d4d 0%, #e60000 50%, #b30000 100%); */
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(179, 0, 0, 0.3),
+              0 6px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #cc0000;
+  color: white; /* optional for contrast */
+}
+
+.crash_report_card {
+  background: linear-gradient(to bottom, #ff4d4d 0%, #e60000 50%, #b30000 100%);
+  height: 100%;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(179, 0, 0, 0.3),
+              0 6px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #cc0000;
+  color: white; /* optional for contrast */
+}
+
+.glossy-red-black-button {
+  background: linear-gradient(to bottom, #990000, #000000);
+  color: white;
+  text-transform: uppercase; /* variant-caps effect */
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2); /* subtle gloss */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.glossy-red-black-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-danger{
+  width: 50px!important;
+}
+
 button:focus {
   outline: 0;
 }

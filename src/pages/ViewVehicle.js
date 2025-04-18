@@ -8,7 +8,6 @@ import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, 
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { io } from 'socket.io-client';
-// import Graph from './Graph'; // Import the Graph component
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import L from 'leaflet';
 import Modal from 'react-bootstrap/Modal';
@@ -23,11 +22,9 @@ import Speedometer, {
   Indicator,
   DangerPath,
 } from 'react-speedometer';
-// import Form from 'react-bootstrap/Form';
+import { FaTrash } from 'react-icons/fa';
 
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
-// const socket = io('http://localhost:3000'); // Replace with your actual API endpoint
-
 
 const customMarker = new L.Icon({
   iconUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // Update this path
@@ -50,6 +47,10 @@ const center = {
 
 const today = new Date();
 
+const handleDelete = (id) => {
+  // Add confirmation if needed
+  // Then call your delete API or update state
+};
 
 // Cache to avoid repeated API calls
 const addressCache = {};
@@ -66,7 +67,6 @@ const reverseGeocode = async (lat, lon) => {
     return `${lat}, ${lon}`;
   }
 };
-
 
 function shiftDate(date, numDays) {
   const newDate = new Date(date);
@@ -97,7 +97,6 @@ const customIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-
 const JourneyMap = ({ journey }) => {
   return (
     <MapContainer center={journey[0]} zoom={13} style={{ width: '100%', height: '100%' }}>
@@ -112,14 +111,10 @@ const JourneyMap = ({ journey }) => {
         <Popup>Start Point</Popup>
       </Marker>
 
-      {/* <Marker position={endPoint} icon={customIcon}>
-        <Popup>End Point</Popup>
-      </Marker> */}
       <Polyline positions={journey} color="blue" />
     </MapContainer>
   );
 };
-
 
 const VehicleProfile = () => {
   const { id } = useParams(); // Get vehicle ID from the URL
@@ -127,7 +122,6 @@ const VehicleProfile = () => {
   const [vin, setVin] = useState(null);
   const [obdData, setObdData] = useState(null);
   const token = localStorage.getItem('token');
-
   // Example usage with journey data
   const journeyData = [
     [53.3498, -6.2603], // Dublin
@@ -156,7 +150,6 @@ const VehicleProfile = () => {
         console.error(error);
       }
     };
-
     if (id) {
       fetchVin();
     }
@@ -178,10 +171,6 @@ const VehicleProfile = () => {
   const handleToggle = () => {
     setChecked(!checked);
   };
-
-
-  console.log(obdData);
-
 
   return (
     <Container>
@@ -213,16 +202,18 @@ const VehicleProfile = () => {
 
             <div className="bg-white p-4 shadow-sm rounded">
               <h4>Fuel Usage</h4>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={obdData.fuel_usage}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
+              {obdData.fuelLevel && (
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={obdData.fuel_usage}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </Col>
           <Col>
@@ -309,6 +300,22 @@ const VehicleProfile = () => {
                   </tr>
                 </tbody>
               </Table>
+            </Row>
+
+            <Row>
+              <div className="bg-white p-4 shadow-sm rounded">
+                <h4>Pie chart</h4>
+                {obdData.speed_clock != null &&
+                  <><Chart
+                    chartType="PieChart"
+                    data={obdData.speed_clock}
+                    options={{
+                      title: "Travelling Speed",
+                    }}
+                    width={"600px"}
+                    height={"300px"} /></>
+                }
+              </div>
             </Row>
 
           </Col>
@@ -472,8 +479,6 @@ const VehicleProfile = () => {
   );
 };
 
-
-
 const fetchAddress = async (lat, lon) => {
   try {
     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
@@ -488,16 +493,12 @@ const fetchAddress = async (lat, lon) => {
   }
 };
 
-// import { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { Container, Row, Col, ListGroup, Button, Modal, Pagination } from 'react-bootstrap';
-// import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
-// import 'leaflet/dist/leaflet.css';
 
 const UsageEfficiency = () => {
   const { id } = useParams();
   const [journeyData, setJourneyData] = useState(null);
   const [journeyInfoData, setJourneyInfoData] = useState(null);
+  const [journeySpeedometerData, setSpeedometerData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJourney, setSelectedJourney] = useState(null);
@@ -506,42 +507,71 @@ const UsageEfficiency = () => {
 
   useEffect(() => {
     const fetchJourneyData = async () => {
-      try {
-        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/journeys/${id}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+      // try {
+      const response = await fetch(`https://backseatdriver-ie-api.onrender.com/journeys/${id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!response.ok) throw new Error(`Error fetching journey data: ${response.statusText}`);
-        const data = await response.json();
-        console.log(data);
+      if (!response.ok) return; //throw new Error(`Error fetching journey data: ${response.statusText}`);
+      const data = await response.json();
+      const updatedData = await Promise.all(
+        data.map(async (journey) => {
+          try {
+            const coords = journey.journey_dataset?.journey;
 
-        const updatedData = await Promise.all(
-          data.map(async (journey) => {
-            const coords = journey.journey_dataset.jounrey;//[journey.journey_dataset.length - 1]//.jounrey;
-            console.log(journey);
-            console.log(coords);
+            // Check if coords is a valid array with at least 2 points
+            if (!Array.isArray(coords) || coords.length < 2) {
+              return {
+                ...journey,
+                startAddress: 'Unknown (no valid coordinates)',
+                endAddress: 'Unknown (no valid coordinates)',
+              };
+            }
+
             const start = coords[0];
             const end = coords[coords.length - 1];
 
-            const startAddr = await reverseGeocode(start[0], start[1]);
-            const endAddr = await reverseGeocode(end[0], end[1]);
+            // Check if start or end are null or invalid
+            if (!start || !end || start.length < 2 || end.length < 2) {
+              return {
+                ...journey,
+                startAddress: 'Unknown (invalid start/end)',
+                endAddress: 'Unknown (invalid start/end)',
+              };
+            }
+
+            // Try reverse geocoding, catch any failures
+            let startAddr = 'Unknown';
+            let endAddr = 'Unknown';
+            try {
+              startAddr = await reverseGeocode(start[0], start[1]);
+              endAddr = await reverseGeocode(end[0], end[1]);
+            } catch (geoErr) {
+              console.error(`Reverse geocoding failed for journey ${journey.id}:`, geoErr);
+            }
 
             return {
               ...journey,
               startAddress: startAddr,
               endAddress: endAddr,
             };
-          })
-        );
+          } catch (err) {
+            console.error(`Error processing journey ${journey.id}:`, err);
+            return {
+              ...journey,
+              startAddress: 'Unknown (processing error)',
+              endAddress: 'Unknown (processing error)',
+            };
+          }
+        })
+      );
 
-        setJourneyData(updatedData);
-      } catch (error) {
-        console.error(error);
-      }
+
+      setJourneyData(updatedData);
     };
 
     const fetchVehicleInfoData = async () => {
@@ -556,9 +586,32 @@ const UsageEfficiency = () => {
 
         if (!response.ok) throw new Error(`Error fetching journey data: ${response.statusText}`);
         const data = await response.json();
-
-        console.log(data);
         setJourneyInfoData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchVehicleSpeedometers = async () => {
+      try {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicle-speed-summary/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) throw new Error(`Error fetching journey data: ${response.statusText}`);
+        const data = await response.json();
+        const processedData = {
+          speedClock: data.speedClock.map(([label, value], index) => {
+            // Skip the header row or rows where value is null
+            if (index === 0 || value === null) return [label, value];
+            return [label, Number(value)];
+          }),
+        };
+        setSpeedometerData(processedData);
       } catch (error) {
         console.error(error);
       }
@@ -567,12 +620,12 @@ const UsageEfficiency = () => {
     if (id) {
       fetchJourneyData();
       fetchVehicleInfoData();
+      fetchVehicleSpeedometers();
     }
   }, [id]);
 
   const handleShowModal = (journey) => {
-    const coords = journey.journey_dataset.jounrey;//[journey.journey_dataset.length - 1];
-    console.log('Pay attentiont to :' + coords);
+    const coords = journey.journey_dataset.jounrey;
     setSelectedJourney(coords);
     setShowModal(true);
   };
@@ -588,21 +641,7 @@ const UsageEfficiency = () => {
   const totalPages = journeyData ? Math.ceil(journeyData.length / itemsPerPage) : 1;
 
 
-  // Pie chart data
-
-  const data = [
-    ["Speed", "seconds counter"],
-    ["idle time (not moving)", 9],
-    ["1-10kmph", 2],
-    ["11-20kmph", 2],
-    ["21-50kmph", 2],
-    ["51-80kmph", 7],
-  ];
-
-  const options = {
-    title: "Travelling Speed",
-  };
-
+  // Pie chart
   return (
     <Container>
       <h1>Vehicle Usage</h1>
@@ -639,7 +678,7 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>TOTAL DISTANCE TRAVELLED (KM)</small><br />
-                    <h1>~</h1>
+                    <h1>{journeyInfoData['average_distance'][0]['avg_distance_km'] ?? '~'}</h1>
                   </div>
                 </Col>
               </Row>
@@ -671,21 +710,16 @@ const UsageEfficiency = () => {
                   </div>
                 </Col>
 
-                {/* <Col>
-
-                  <div className="bg-white p-4 shadow-sm rounded">
-                    <small>TOTAL JOURNEYS</small><br />
-                    <h1>10</h1>
-                  </div>
-                </Col> */}
               </Row>
 
             </Col>
             <Col>
               <Chart
                 chartType="PieChart"
-                data={data}
-                options={options}
+                data={journeySpeedometerData.speedClock}
+                options={{
+                  title: "Travelling Speed",
+                }}
                 width={"100%"}
                 height={"300px"}
               />
@@ -697,7 +731,19 @@ const UsageEfficiency = () => {
                     <ListGroup.Item key={journey.journey_id ?? ''}>
                       Journey from <strong>{journey.startAddress}</strong> to <strong>{journey.endAddress}</strong> <br />
                       Duration: {journey.journeyDuration ?? ''} <br />
-                      Date:  <br />
+                      Date: <br />
+
+                      {/* Delete Button */}
+                      <Button
+                        variant="danger"
+                        className="ms-2"
+                        style={{ float: 'right' }}
+                        onClick={() => handleDelete(journey.journey_id)}
+                      >
+                        <FaTrash />
+                      </Button>
+
+                      {/* View Journey Button */}
                       <Button
                         style={{ background: 'rgb(74, 28, 111)', float: 'right' }}
                         variant="primary"
@@ -781,7 +827,6 @@ const UsageEfficiency = () => {
   );
 };
 
-
 function Safety() {
   return (
     <>
@@ -794,7 +839,8 @@ function Safety() {
         <Row>
           <Col>
             <div className="bg-white p-4 shadow-sm rounded">
-              <h4>Safety Grade</h4>
+              {/* <h4>Safety Grade</h4> */}
+              <p>Safety Grade</p>
               <Speedometer
                 value={40}
                 max={100}
@@ -821,12 +867,42 @@ function Safety() {
               </Speedometer>
             </div>
           </Col>
-
           <Col>
-            <div className="bg-white p-4 shadow-sm rounded">
-
+            <div className='moderate_crash_report_card'>
+              <small>Crash Reports</small> <br />
+              <h1>5</h1><h4>Verified accidents registerd to this vehicle</h4>
+              <button class="glossy-red-black-button">Click Me</button>
             </div>
           </Col>
+          <Col>
+            <div className='crash_report_card'>
+              <small>Crash Reports</small> <br />
+              <h1>5</h1><h4>Verified accidents registerd to this vehicle</h4>
+              <button class="glossy-red-black-button">Click Me</button>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <br/><br/>
+        </Row>
+        <Row>
+          <Col>
+            <MapContainer center={[53.2707,-9.0568]} zoom={13} style={{ width: '100%', height: '400px' }}>
+              <TileLayer
+                url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+              />
+
+              {/* <Polyline positions={journey} color="blue" /> */}
+            </MapContainer>
+
+
+          </Col>
+        </Row>
+        <Row>
+          <br />
+          <br />
         </Row>
       </Container>
     </>
