@@ -12,6 +12,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "leaflet": "^1.9.4",
+    "leaflet.heat": "^0.2.0",
     "lucide-react": "^0.452.0",
     "mdb-react-ui-kit": "^9.0.0",
     "react": "^19.0.0",

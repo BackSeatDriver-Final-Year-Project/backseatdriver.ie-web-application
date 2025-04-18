@@ -1,5 +1,28 @@
+.color-empty {
+  fill: #eeeeee;
+}
+.color-scale-1 {
+  fill: #d6e685;
+}
+.color-scale-2 {
+  fill: #8cc665;
+}
+.color-scale-3 {
+  fill: #44a340;
+}
+.color-scale-4 {
+  fill: #1e6823;
+}
+
+
+
+
 .crash_report_card small{
   font-variant: all-petite-caps;
+}
+
+.moderate_crash_report_card h1, .crash_report_card h1{
+  font-size: 4.2em;
 }
 
 .moderate_crash_report_card{
@@ -148,8 +171,12 @@ body {
   }
 }
 
+.navbar {
+  background-color: #2d0b4a;
+}
+
 .App-header {
-  background-color: #282c34;
+  background-color: #2d0b4a;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

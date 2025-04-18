@@ -23,6 +23,8 @@ import Speedometer, {
   DangerPath,
 } from 'react-speedometer';
 import { FaTrash } from 'react-icons/fa';
+import HeatmapLayer from "../components/HeatMapLayer";
+
 
 const socket = io('https://backseatdriver-ie-api.onrender.com'); // Replace with your actual API endpoint
 
@@ -626,7 +628,7 @@ const UsageEfficiency = () => {
 
   const handleShowModal = (journey) => {
     const coords = journey.journey_dataset.jounrey;
-    setSelectedJourney(coords);
+    setSelectedJourney(journey);
     setShowModal(true);
   };
 
@@ -760,20 +762,55 @@ const UsageEfficiency = () => {
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   />
-                  {[...Array(totalPages).keys()].map((page) => (
-                    <Pagination.Item
-                      key={page + 1}
-                      active={page + 1 === currentPage}
-                      onClick={() => setCurrentPage(page + 1)}
-                    >
-                      {page + 1}
-                    </Pagination.Item>
-                  ))}
+
+                  {totalPages > 1 && (
+                    <>
+                      {/* Always show the first page */}
+                      <Pagination.Item
+                        active={1 === currentPage}
+                        onClick={() => setCurrentPage(1)}
+                      >
+                        1
+                      </Pagination.Item>
+
+                      {/* Show leading ellipsis if needed */}
+                      {currentPage > 4 && <Pagination.Ellipsis disabled />}
+
+                      {/* Show up to 3 pages before/after current */}
+                      {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter((page) => page !== 1 && page !== totalPages)
+                        .filter((page) => Math.abs(currentPage - page) <= 2)
+                        .map((page) => (
+                          <Pagination.Item
+                            key={page}
+                            active={page === currentPage}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </Pagination.Item>
+                        ))}
+
+                      {/* Show trailing ellipsis if needed */}
+                      {currentPage < totalPages - 3 && <Pagination.Ellipsis disabled />}
+
+                      {/* Always show the last page */}
+                      {totalPages > 1 && (
+                        <Pagination.Item
+                          active={currentPage === totalPages}
+                          onClick={() => setCurrentPage(totalPages)}
+                        >
+                          {totalPages}
+                        </Pagination.Item>
+                      )}
+                    </>
+                  )}
+
                   <Pagination.Next
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   />
                 </Pagination>
+
               </div>
             </Col>
           </Row>
@@ -784,7 +821,8 @@ const UsageEfficiency = () => {
               <Modal.Title>Journey Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {selectedJourney && (
+              {JSON.stringify(selectedJourney)}
+              {/* {selectedJourney && (
                 <MapContainer
                   center={selectedJourney[0]}
                   zoom={13}
@@ -806,7 +844,7 @@ const UsageEfficiency = () => {
                   </Marker>
 
                 </MapContainer>
-              )}
+              )} */}
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleCloseModal}>
@@ -828,6 +866,12 @@ const UsageEfficiency = () => {
 };
 
 function Safety() {
+  const heatmapPoints = [
+    [53.2707, -9.0568, 0.5], // latitude, longitude, intensity
+    [53.2717, -9.0565, 0.8],
+    [53.2720, -9.0570, 1.0],
+    // add more points here
+  ];
   return (
     <>
       <Container>
@@ -870,35 +914,33 @@ function Safety() {
           <Col>
             <div className='moderate_crash_report_card'>
               <small>Crash Reports</small> <br />
-              <h1>5</h1><h4>Verified accidents registerd to this vehicle</h4>
+              <h1>0</h1><h4>Verified accidents registerd to this vehicle</h4>
               <button class="glossy-red-black-button">Click Me</button>
             </div>
           </Col>
           <Col>
             <div className='crash_report_card'>
               <small>Crash Reports</small> <br />
-              <h1>5</h1><h4>Verified accidents registerd to this vehicle</h4>
+              <h1>0</h1><h4>Verified accidents registerd to this vehicle</h4>
               <button class="glossy-red-black-button">Click Me</button>
             </div>
           </Col>
         </Row>
         <Row>
-          <br/><br/>
+          <br /><br />
         </Row>
         <Row>
           <Col>
-            <MapContainer center={[53.2707,-9.0568]} zoom={13} style={{ width: '100%', height: '400px' }}>
+            <MapContainer center={[53.2707, -9.0568]} zoom={13} style={{ width: '100%', height: '400px' }}>
               <TileLayer
                 url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                 attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
               />
-
-              {/* <Polyline positions={journey} color="blue" /> */}
+              <HeatmapLayer points={heatmapPoints} />
             </MapContainer>
-
-
           </Col>
+
         </Row>
         <Row>
           <br />
