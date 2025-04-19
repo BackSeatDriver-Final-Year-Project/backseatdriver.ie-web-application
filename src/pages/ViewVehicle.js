@@ -523,7 +523,7 @@ const UsageEfficiency = () => {
       const updatedData = await Promise.all(
         data.map(async (journey) => {
           try {
-            const coords = journey.journey_dataset?.journey;
+            const coords = journey.journey_dataset?.jounrey;
 
             // Check if coords is a valid array with at least 2 points
             if (!Array.isArray(coords) || coords.length < 2) {
@@ -550,10 +550,10 @@ const UsageEfficiency = () => {
             let startAddr = 'Unknown';
             let endAddr = 'Unknown';
             try {
-              startAddr = await reverseGeocode(start[0], start[1]);
-              endAddr = await reverseGeocode(end[0], end[1]);
+              startAddr = 'start address';//await reverseGeocode(start[0], start[1]);
+              endAddr = 'end address';//await reverseGeocode(end[0], end[1]);
             } catch (geoErr) {
-              console.error(`Reverse geocoding failed for journey ${journey.id}:`, geoErr);
+              console.log(`Reverse geocoding failed for journey ${journey.id}:`, geoErr);
             }
 
             return {
@@ -814,6 +814,30 @@ const UsageEfficiency = () => {
               </div>
             </Col>
           </Row>
+          
+          {selectedJourney != null && (
+            <MapContainer
+              center={selectedJourney[0]}
+              zoom={13}
+              style={{ height: '400px', width: '100%', marginTop: '20px' }}
+            >
+              <TileLayer
+                url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+              />
+              <Polyline positions={selectedJourney} color="blue" />
+
+              <Marker position={selectedJourney[0]} icon={customIcon}>
+                <Popup>Start Point</Popup>
+              </Marker>
+
+              <Marker position={selectedJourney[selectedJourney.length - 1]} icon={customIcon}>
+                <Popup>End Point</Popup>
+              </Marker>
+
+            </MapContainer>
+          )}
 
           {/* Modal with Map */}
           <Modal show={showModal} onHide={handleCloseModal} size="lg">
@@ -821,30 +845,78 @@ const UsageEfficiency = () => {
               <Modal.Title>Journey Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+
+              {selectedJourney && (
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Journey ID</strong></td>
+                      <td>{selectedJourney['journey_id'] ?? ''}</td>
+                    </tr>
+
+
+                    <tr>
+                      <td><strong>Journey Start time</strong></td>
+                      <td>{selectedJourney['journey_start_time']}</td>
+                    </tr>
+
+
+                    <tr>
+                      <td><strong>Journey Start time</strong></td>
+                      <td>{selectedJourney['journey_commence_time']}</td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Journey Duration</strong></td>
+                      <td>{selectedJourney['journeyDuration']}</td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Start Address</strong></td>
+                      <td>{selectedJourney['startAddress']}</td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>End Address</strong></td>
+                      <td>{selectedJourney['endAddress']}</td>
+                    </tr>
+
+
+                    <tr>
+                      <td><strong>Fuel Usage</strong></td>
+                      <td>{JSON.stringify(selectedJourney['fuel_usage_dataset'][0])}</td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Fuel Usage</strong></td>
+                      <td>{JSON.stringify(selectedJourney['fuel_usage_dataset'][selectedJourney['fuel_usage_dataset'].length - 1])}</td>
+                    </tr>
+
+
+                  </tbody>
+                </Table>
+              )};
+
+
               {JSON.stringify(selectedJourney)}
-              {/* {selectedJourney && (
-                <MapContainer
-                  center={selectedJourney[0]}
-                  zoom={13}
-                  style={{ height: '400px', width: '100%', marginTop: '20px' }}
-                >
-                  <TileLayer
-                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
-                    attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
-                  />
-                  <Polyline positions={selectedJourney} color="blue" />
 
-                  <Marker position={selectedJourney[0]} icon={customIcon}>
-                    <Popup>Start Point</Popup>
-                  </Marker>
+              {selectedJourney != null &&
+                <><Chart
+                  chartType="PieChart"
+                  data={selectedJourney.journey_dataset.speed_clock}
+                  options={{
+                    title: "Travelling Speed",
+                  }}
+                  width={"600px"}
+                  height={"300px"} /></>
+              }
 
-                  <Marker position={selectedJourney[selectedJourney.length - 1]} icon={customIcon}>
-                    <Popup>End Point</Popup>
-                  </Marker>
-
-                </MapContainer>
-              )} */}
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleCloseModal}>
