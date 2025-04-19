@@ -12,44 +12,25 @@
   /* position: absolute; */
   /* inset: 0; */
   /* z-index: -1; */
+  border-right: 5px solid white;
   background:
     repeating-linear-gradient(
       to right,
       transparent,
       transparent 10px,
-      rgba(255, 255, 255, 0.1) 10px,
-      rgba(255, 255, 255, 0.1) 12px
+      rgba(255, 255, 255, 0.3) 10px,
+      rgba(255, 255, 255, 0.3) 12px
     ),
     repeating-linear-gradient(
       to bottom,
       transparent,
       transparent 10px,
-      rgba(255, 255, 255, 0.1) 10px,
-      rgba(255, 255, 255, 0.1) 12px
+      rgba(255, 255, 255, 0.3) 10px,
+      rgba(255, 255, 255, 0.3) 12px
     );
+    width: 100%;
   /* border-radius: inherit; */
 }
-
-
-
-
-
-
-.sidebarLink.active::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);  /* Semi-transparent overlay */
-  z-index: 0;
-}
-
-.sidebarLink.active > * {
-  position: relative;
-  z-index: 2;
-}
-
-
 
 
 .sidebarLink{
