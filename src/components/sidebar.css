@@ -18,15 +18,15 @@
       to right,
       transparent,
       transparent 10px,
-      rgba(255, 255, 255, 0.3) 10px,
-      rgba(255, 255, 255, 0.3) 12px
+      rgba(255, 255, 255, 0.04) 10px,
+      rgba(255, 255, 255, 0.04) 12px
     ),
     repeating-linear-gradient(
       to bottom,
       transparent,
       transparent 10px,
-      rgba(255, 255, 255, 0.3) 10px,
-      rgba(255, 255, 255, 0.3) 12px
+      rgba(255, 255, 255, 0.04) 10px,
+      rgba(255, 255, 255, 0.04) 12px
     );
     width: 100%;
   /* border-radius: inherit; */
