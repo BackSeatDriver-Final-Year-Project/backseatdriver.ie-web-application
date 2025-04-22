@@ -12,6 +12,8 @@
   /* position: absolute; */
   /* inset: 0; */
   /* z-index: -1; */
+  margin:5px;
+  box-shadow: white 1px 1px 5px;
   border-right: 5px solid white;
   background:
     repeating-linear-gradient(
@@ -28,7 +30,7 @@
       rgba(255, 255, 255, 0.04) 10px,
       rgba(255, 255, 255, 0.04) 12px
     );
-    width: 100%;
+    width: 89%;
   /* border-radius: inherit; */
 }
 
@@ -62,7 +64,7 @@
 }
 
 .sidebar-header {
-  padding: 15px;
+  padding: 10px;
   font-size: 1.25rem;
   color: #fff; /* White text for header */
   transition: opacity 0.3s ease;

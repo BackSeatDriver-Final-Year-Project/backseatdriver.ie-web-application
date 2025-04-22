@@ -43,7 +43,6 @@ const Sidebar = ({ setActiveView }) => {
             {isHovered && <small>Live Data</small>}
           </button>
         </li>
-        <hr />
         <li className="nav-item">
           <button
             className={`btn btn-link sidebarLink ${activeItem === 'usageEfficiency' ? 'active' : ''}`}
@@ -77,6 +76,7 @@ const Sidebar = ({ setActiveView }) => {
           {isHovered && <small>Logout</small>}
         </button>
       </ul>
+      <div style={{padding:0}} className="sidebar-header border-bottom"></div>
     </div>
   );
 };

@@ -652,20 +652,24 @@ const UsageEfficiency = () => {
           <Row className="mb-4">
             <Col>
               <div className="bg-white p-4 shadow-sm rounded">
-                <CalendarHeatmap
-                  values={journeyInfoData.calendarHeatmap ?? []}
-                  classForValue={(value) => {
-                    if (!value) return 'color-empty';
-                    return `color-scale-${value.count}`;
-                  }}
-                  tooltipDataAttrs={(value) => {
-                    if (!value || !value.date) return null;
-                    return {
-                      'data-tip': `${value.date} — ${value.count} journeys`,
-                    };
-                  }}
-                />
-                <ReactTooltip />
+                {journeyInfoData?.calendarHeatmap?.length > 0 && (
+                  <>
+                    <CalendarHeatmap
+                      values={journeyInfoData.calendarHeatmap}
+                      classForValue={(value) => {
+                        if (!value) return 'color-empty';
+                        return `color-scale-${value.count}`;
+                      }}
+                      tooltipDataAttrs={(value) => {
+                        if (!value || !value.date) return null;
+                        return {
+                          'data-tip': `${value.date} — ${value.count} journeys`,
+                        };
+                      }}
+                    />
+                    <ReactTooltip />
+                  </>
+                )}
               </div>
 
               <Row>
@@ -814,7 +818,7 @@ const UsageEfficiency = () => {
               </div>
             </Col>
           </Row>
-          
+
           {selectedJourney != null && (
             <MapContainer
               center={selectedJourney[0]}
@@ -904,7 +908,7 @@ const UsageEfficiency = () => {
               )};
 
 
-              {JSON.stringify(selectedJourney)}
+              {/* {JSON.stringify(selectedJourney)} */}
 
               {selectedJourney != null &&
                 <><Chart
