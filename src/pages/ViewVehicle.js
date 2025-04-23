@@ -819,29 +819,6 @@ const UsageEfficiency = () => {
             </Col>
           </Row>
 
-          {selectedJourney != null && (
-            <MapContainer
-              center={selectedJourney[0]}
-              zoom={13}
-              style={{ height: '400px', width: '100%', marginTop: '20px' }}
-            >
-              <TileLayer
-                url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-                subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
-                attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
-              />
-              <Polyline positions={selectedJourney} color="blue" />
-
-              <Marker position={selectedJourney[0]} icon={customIcon}>
-                <Popup>Start Point</Popup>
-              </Marker>
-
-              <Marker position={selectedJourney[selectedJourney.length - 1]} icon={customIcon}>
-                <Popup>End Point</Popup>
-              </Marker>
-
-            </MapContainer>
-          )}
 
           {/* Modal with Map */}
           <Modal show={showModal} onHide={handleCloseModal} size="lg">
@@ -849,6 +826,41 @@ const UsageEfficiency = () => {
               <Modal.Title>Journey Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+
+            {/* {JSON.stringify(journeyInfoData)}
+          
+          {JSON.stringify(journeyData)} */}
+
+          {/* {selectedJourney && (
+
+            <JourneyMap style={{ height: '90%' }} journey={[selectedJourney.journey_dataset.jounrey]} />
+          )} */}
+
+
+            {selectedJourney && (
+                
+              <MapContainer
+                center={[53.2707, -9.0568]}
+                zoom={13}
+                style={{ height: '400px', width: '100%', marginTop: '20px' }}
+              >
+                <TileLayer
+                  url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                  attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+                />
+                <Polyline positions={selectedJourney['journey_dataset']['jounrey']} color="blue" />
+
+                {/* <Marker position={selectedJourney[0]} icon={customIcon}>
+                  <Popup>Start Point</Popup>
+                </Marker>
+
+                <Marker position={selectedJourney[selectedJourney.length - 1]} icon={customIcon}>
+                  <Popup>End Point</Popup>
+                </Marker>  */}
+
+              </MapContainer>
+            )}
 
               {selectedJourney && (
                 <Table striped bordered hover>
@@ -905,10 +917,13 @@ const UsageEfficiency = () => {
 
                   </tbody>
                 </Table>
-              )};
+              )}
 
-
-              {/* {JSON.stringify(selectedJourney)} */}
+              {selectedJourney && (
+                <td>
+                  { JSON.stringify(selectedJourney['journey_dataset']['jounrey']) }
+                </td>
+              )}
 
               {selectedJourney != null &&
                 <><Chart
