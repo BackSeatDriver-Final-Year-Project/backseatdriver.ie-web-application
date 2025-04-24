@@ -54,7 +54,7 @@ function MyVehicles() {
   };
 
   return (
-    <Container style={{ backgroundColor: 'navy', padding: '20px', marginTop: '10px', borderRadius: '8px', color: 'white' }}>
+    <Container style={{ background: 'linear-gradient(180deg,#2d0b4a,#4a1c6f)', padding: '20px', marginTop: '10px', borderRadius: '8px', color: 'white' }}>
       <Row>
         <Col xs="auto">
           <Button onClick={handleLogout}
@@ -67,10 +67,11 @@ function MyVehicles() {
       </Row>
       <Row className="align-items-center mb-3">
         <Col>
-          <h2>Your Vehicles</h2>
+          <br />
+          <h2>Your Assets/ Vehicles</h2>
+          <p>Manage and access data for each of your registered vehicles below.</p>
         </Col>
       </Row>
-      <p>Manage and access data for each of your registered vehicles below.</p>
 
       <Row className="mt-4">
         {/* Check if vehicles array is empty */}
@@ -89,8 +90,8 @@ function MyVehicles() {
                     <Card.Title style={{ color: 'black' }}>{vehicle.vehicle_id || vehicle._id || vehicle.id}</Card.Title>
                     <Card.Title style={{ color: 'black' }}>{vehicle.name}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">Last login: {vehicle.lastLogin}</Card.Subtitle>
-                    <Button 
-                      variant="link" 
+                    <Button
+                      variant="link"
                       onClick={() => handleViewVehicle(vehicle.unique_id || vehicle._id || vehicle.id)}
                       style={{ padding: 0 }}
                     >
@@ -102,6 +103,21 @@ function MyVehicles() {
             );
           })
         )}
+
+        <Col>
+          <div className='add-vehicle-button' style={{ width: '100%' }}>
+            <Card.Body>
+
+              <Button
+                variant="link"
+                // onClick={() => handleViewVehicle(vehicle.unique_id || vehicle._id || vehicle.id)}
+                style={{ padding: 0 }}
+              >
+                + Create new Vehicle Profile
+              </Button>
+            </Card.Body>
+          </div>
+        </Col>
       </Row>
     </Container>
   );

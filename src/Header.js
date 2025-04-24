@@ -91,7 +91,7 @@ import logo from './images/BackSeatDriverLogo.png';
 
 function Header() {
 
-  return (<Navbar bg="purple" expand="lg" variant="dark" className="py-3" style={{ backgroundColor: '#6f42c1' }}>
+  return (<Navbar bg="purple" expand="lg" variant="dark" className="py-3" style={{ background: 'linear-gradient(0deg, #2d0b4a, #4a1c6f)' }}>
     <Container>
       {/* Logo */}
       <Navbar.Brand href="/">

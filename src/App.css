@@ -1,15 +1,19 @@
 .color-empty {
   fill: #eeeeee;
 }
+
 .color-scale-1 {
   fill: #d6e685;
 }
+
 .color-scale-2 {
   fill: #8cc665;
 }
+
 .color-scale-3 {
   fill: #44a340;
 }
+
 .color-scale-4 {
   fill: #1e6823;
 }
@@ -17,24 +21,26 @@
 
 
 
-.crash_report_card small{
+.crash_report_card small {
   font-variant: all-petite-caps;
 }
 
-.moderate_crash_report_card h1, .crash_report_card h1{
+.moderate_crash_report_card h1,
+.crash_report_card h1 {
   font-size: 4.2em;
 }
 
-.moderate_crash_report_card{
+.moderate_crash_report_card {
   background: linear-gradient(to bottom, #ff7a00 0%, #e65c00 50%, #b34700 100%);
   height: 100%;
   /* linear-gradient(to bottom, #ff4d4d 0%, #e60000 50%, #b30000 100%); */
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(179, 0, 0, 0.3),
-              0 6px 20px rgba(0, 0, 0, 0.15);
+    0 6px 20px rgba(0, 0, 0, 0.15);
   border: 1px solid #cc0000;
-  color: white; /* optional for contrast */
+  color: white;
+  /* optional for contrast */
 }
 
 .crash_report_card {
@@ -43,21 +49,24 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(179, 0, 0, 0.3),
-              0 6px 20px rgba(0, 0, 0, 0.15);
+    0 6px 20px rgba(0, 0, 0, 0.15);
   border: 1px solid #cc0000;
-  color: white; /* optional for contrast */
+  color: white;
+  /* optional for contrast */
 }
 
 .glossy-red-black-button {
   background: linear-gradient(to bottom, #990000, #000000);
   color: white;
-  text-transform: uppercase; /* variant-caps effect */
+  text-transform: uppercase;
+  /* variant-caps effect */
   font-weight: bold;
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2); /* subtle gloss */
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  /* subtle gloss */
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
@@ -66,11 +75,11 @@
 .glossy-red-black-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5),
-              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-.btn-danger{
-  width: 50px!important;
+.btn-danger {
+  width: 50px !important;
 }
 
 button:focus {
@@ -200,4 +209,70 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.pulsing-list li::marker {
+  font-size: 1.8em;
+  color: green;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.5);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+#overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
+#text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 50px;
+  color: white;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+  text-shadow: black 1px 0 10px;
+}
+
+.grade-letter {
+  font-size: 4.3em;
+}
+
+.add-vehicle-button {
+  width: 100%;
+  border: 2px solid white;
+  border-radius: 12px;
+  min-height: 169px;
+}
+
+.space-y-3 p{
+  margin:0!important;
+  padding:0!important;
 }

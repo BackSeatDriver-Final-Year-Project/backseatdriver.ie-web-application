@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './sidebar.css';
+import './styling/sidebar.css';
 import { MDBIcon } from 'mdb-react-ui-kit';
 
 const Sidebar = ({ setActiveView }) => {
@@ -11,6 +11,10 @@ const Sidebar = ({ setActiveView }) => {
     setActiveView(view);
   };
 
+  const backToList = () => {
+    window.location.href = '/vehicles';
+  };
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
@@ -70,8 +74,15 @@ const Sidebar = ({ setActiveView }) => {
             {isHovered && <small>BackSeatDriver AI Client</small>}
           </button>
         </li>
+
+        {/* http://localhost:3000/vehicles */}
         
-        <button className="btn btn-danger mt-3" onClick={handleLogout}>
+        <button className="btn mt-3" style={{color: "white",background: "linear-gradient(0deg, #ff6600, #ffcc66)", width: "85%", bottom: "52px", position: "absolute", margin: "5px"}} onClick={backToList}>
+          <MDBIcon fas icon="caret-left" />
+          {isHovered && <small>View another vehicle</small>}
+        </button>
+
+        <button className="btn mt-3" style={{color: "white",background: "linear-gradient(0deg, #8b0000, #ff4d4d)", width: "85%", bottom: "10px", position: "absolute", margin: "5px"}} onClick={handleLogout}>
           <MDBIcon fas icon="sign-out-alt" />
           {isHovered && <small>Logout</small>}
         </button>
