@@ -33,7 +33,8 @@ const Sidebar = ({ setActiveView }) => {
           style={{
             width: "100%",
             maxWidth: "50px",
-            borderRadius: "50%",
+            borderRadius: "5%",
+            boxShadow: "black 1px 1px 5px"
           }}
         />
       </div>

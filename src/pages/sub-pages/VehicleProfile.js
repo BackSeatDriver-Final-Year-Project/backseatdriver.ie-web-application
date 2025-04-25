@@ -183,8 +183,10 @@ const VehicleProfile = () => {
                         </Row>
 
                         <Row>
+                            
 
                             <Col>
+                            {JSON.stringify(obdData)}
                                 <div className='moderate_crash_report_card'>
                                     <small>Crash Reports</small> <br />
                                     <h1>{obdData.crash_reports.length}</h1><h4>Verified accidents during this journey</h4>

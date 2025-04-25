@@ -276,3 +276,7 @@ body {
   margin:0!important;
   padding:0!important;
 }
+
+.btn-primary {
+  background: rgb(74, 28, 111)!important;
+}

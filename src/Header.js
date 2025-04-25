@@ -88,6 +88,7 @@ import {
   MDBBtn
 } from 'mdb-react-ui-kit';
 import logo from './images/BackSeatDriverLogo.png';
+import { Radius } from 'lucide-react';
 
 function Header() {
 
@@ -117,8 +118,9 @@ function Header() {
           <Button variant="outline-light">Login</Button>
         </Link>
         <Link to="/register">
-          <Button variant="outline-light">Register</Button>
+          <Button variant="outline-light" style={{marginLeft: '7px'}}>Register</Button>
         </Link>
+        {<a href="https://github.com/BackSeatDriver-Final-Year-Project"><img src='https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png' style={{width:'45px', borderRadius: '50%', margin: '5px'}} /></a>}
       </Navbar.Collapse>
     </Container>
   </Navbar>
