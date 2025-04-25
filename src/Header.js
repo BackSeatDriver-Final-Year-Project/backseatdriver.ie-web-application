@@ -96,11 +96,12 @@ function Header() {
     <Container>
       {/* Logo */}
       <Navbar.Brand href="/">
-        <img
+        {/* <img
           src={logo} // Replace with your logo image path
           height="50"
           // alt="Logo"
-        />
+        /> */}
+        {<img src="https://github.com/BackSeatDriver-Final-Year-Project/.github/blob/main/BackSeatDriverLogo.bb0f13939ee94e83aaf7.png?raw=true" height="50px"/>}
         {/* <MDBIcon fas icon="bold" /> */}
       </Navbar.Brand>
 
