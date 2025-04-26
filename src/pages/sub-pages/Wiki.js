@@ -51,6 +51,7 @@
 
 // src/components/AITools/AIToolsPage.jsx
 import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button, Pagination } from 'react-bootstrap';
 import './AITools.css';
 
 const Wiki = () => {
@@ -198,66 +199,68 @@ const Wiki = () => {
   }
 
   return (
-    <div className="ai-tools-container">
-      <div className="ai-tools-header">
-        <h1>AI Insights Tools</h1>
-        <p>Leverage artificial intelligence to gain deeper insights from your OBD-II data</p>
-      </div>
-
-      {error && (
-        <div className="error-message">
-          <p>{error}</p>
-        </div>
-      )}
-
-      <div className="model-selection-container">
-        <h2>Select AI Model</h2>
-        <div className="models-grid">
-          {aiModels.map(model => (
-            <div 
-              key={model.id}
-              className={`model-card ${selectedModel === model.id ? 'selected' : ''} ${!hasRequiredData(model.id) ? 'disabled' : ''}`}
-              onClick={() => hasRequiredData(model.id) && setSelectedModel(model.id)}
-            >
-              <h3>{model.name}</h3>
-              <p>{model.description}</p>
-              {!hasRequiredData(model.id) && (
-                <div className="data-missing-badge">
-                  Insufficient data
-                </div>
-              )}
-            </div>
-          ))}
+    <><Container>
+      <h1>BackSeatDriver AI Tool</h1>
+    </Container><div className="ai-tools-container">
+        <div className="ai-tools-header">
+          <h1>AI Insights Tools</h1>
+          <p>Leverage artificial intelligence to gain deeper insights from your OBD-II data</p>
         </div>
 
-        <div className="selected-model-info">
-          <h3>Selected: {aiModels.find(m => m.id === selectedModel)?.name}</h3>
-          <p>Required data: {aiModels.find(m => m.id === selectedModel)?.requiredDataPoints.join(', ')}</p>
-          <button 
-            className="run-model-button" 
-            onClick={runPrediction}
-            disabled={runningPrediction || !hasRequiredData(selectedModel)}
-          >
-            {runningPrediction ? 'Running Analysis...' : 'Run Analysis'}
-          </button>
-        </div>
-      </div>
-
-      <div className="prediction-results-container">
-        {runningPrediction ? (
-          <div className="running-prediction">
-            <div className="loading-spinner"></div>
-            <p>Running AI analysis on your driving data...</p>
-          </div>
-        ) : predictionResults ? (
-          renderPredictionResults()
-        ) : (
-          <div className="no-results">
-            <p>Select a model and run the analysis to see insights</p>
+        {error && (
+          <div className="error-message">
+            <p>{error}</p>
           </div>
         )}
-      </div>
-    </div>
+
+        <div className="model-selection-container">
+          <h2>Select AI Model</h2>
+          <div className="models-grid">
+            {aiModels.map(model => (
+              <div
+                key={model.id}
+                className={`model-card ${selectedModel === model.id ? 'selected' : ''} ${!hasRequiredData(model.id) ? 'disabled' : ''}`}
+                onClick={() => hasRequiredData(model.id) && setSelectedModel(model.id)}
+              >
+                <h3>{model.name}</h3>
+                <p>{model.description}</p>
+                {/* {!hasRequiredData(model.id) && (
+              <div className="data-missing-badge">
+                Insufficient data
+              </div>
+            )} */}
+              </div>
+            ))}
+          </div>
+
+          <div className="selected-model-info">
+            <h3>Selected: {aiModels.find(m => m.id === selectedModel)?.name}</h3>
+            <p>Required data: {aiModels.find(m => m.id === selectedModel)?.requiredDataPoints.join(', ')}</p>
+            <button
+              className="run-model-button"
+              onClick={runPrediction}
+              disabled={runningPrediction || !hasRequiredData(selectedModel)}
+            >
+              {runningPrediction ? 'Running Analysis...' : 'Run Analysis'}
+            </button>
+          </div>
+        </div>
+
+        <div className="prediction-results-container">
+          {runningPrediction ? (
+            <div className="running-prediction">
+              <div className="loading-spinner"></div>
+              <p>Running AI analysis on your driving data...</p>
+            </div>
+          ) : predictionResults ? (
+            renderPredictionResults()
+          ) : (
+            <div className="no-results">
+              <p>Select a model and run the analysis to see insights</p>
+            </div>
+          )}
+        </div>
+      </div></>
   );
 };
 

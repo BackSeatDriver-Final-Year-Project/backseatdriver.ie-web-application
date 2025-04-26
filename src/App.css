@@ -280,3 +280,14 @@ body {
 .btn-primary {
   background: rgb(74, 28, 111)!important;
 }
+
+
+#live-console-output {
+  color: white;
+  background: black;
+  padding: 10px;
+  overflow: auto;
+  height: 250px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
