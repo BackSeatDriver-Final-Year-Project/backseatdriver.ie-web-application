@@ -291,3 +291,11 @@ body {
   margin-bottom: 10px;
   border-radius: 10px;
 }
+
+#aiResponse{
+  background: mediumpurple;
+  padding: 10px;
+  border-radius: 5%;
+  border: 1px solid black;
+  color: white;
+}

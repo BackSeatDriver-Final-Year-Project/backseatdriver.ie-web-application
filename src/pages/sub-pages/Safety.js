@@ -76,10 +76,26 @@ function Safety() {
     useEffect(() => {
         if (safetyData) {
             const metrics = [
-                { name: 'Hard Braking', incidents: safetyData.crashData.total_hard_braking_events, level: (safetyData.crashData.total_hard_braking_events + 20), color: '#e74c3c' },
-                { name: 'Speeding', incidents: safetyData.crashData.total_speeding_events, level: (safetyData.crashData.total_speeding_events + 20), color: '#f1c40f' },
-                { name: 'Acceleration', incidents: safetyData.crashData.total_hard_acceleration_events, level: (safetyData.crashData.total_hard_acceleration_events + 20), color: '#27ae60' }
-            ];
+                { 
+                  name: 'Hard Braking', 
+                  incidents: safetyData?.crashData?.total_hard_braking_events ?? 0, 
+                  level: (safetyData?.crashData?.total_hard_braking_events ?? 0) + 20, 
+                  color: '#e74c3c' 
+                },
+                { 
+                  name: 'Speeding', 
+                  incidents: safetyData?.crashData?.total_speeding_events ?? 0, 
+                  level: (safetyData?.crashData?.total_speeding_events ?? 0) + 20, 
+                  color: '#f1c40f' 
+                },
+                { 
+                  name: 'Acceleration', 
+                  incidents: safetyData?.crashData?.total_hard_acceleration_events ?? 0, 
+                  level: (safetyData?.crashData?.total_hard_acceleration_events ?? 0) + 20, 
+                  color: '#27ae60' 
+                }
+              ]
+              ;
             setRiskMetrics(metrics);
         }
     }, [safetyData]); // This effect runs every time safetyData is updated
@@ -232,8 +248,11 @@ function Safety() {
                                     <h4>Crash reports</h4>
                                     {
                                         <ul>
-                                            <li>Crash count : {safetyData['crashData']['crash_reports'][0].length}</li>
-                                            <li>Severe Crash count : {safetyData['crashData']['severe_crash_reports'][0].length}</li>
+                                            {/* <li>Crash count : {safetyData['crashData']['crash_reports'][0].length}</li> */}
+                                            <li>Crash count: {safetyData?.crashData?.crash_reports?.[0]?.length ?? 0}</li>
+
+                                            <li>Severe Crash count: {safetyData?.crashData?.severe_crash_reports?.[0]?.length ?? 0}</li>
+                                            {/* <li>Severe Crash count : {safetyData['crashData']['severe_crash_reports'][0].length}</li> */}
                                         </ul>
                                     }
 

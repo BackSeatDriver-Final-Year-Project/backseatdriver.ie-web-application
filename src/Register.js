@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import './Register.css'; // You can create this CSS file to style the register page
+import { useNavigate } from 'react-router-dom';  // Import the navigation hook for redirection
 
 function Register() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');  // State to handle errors
   const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();  // Hook for navigation
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation for password match
@@ -19,7 +22,47 @@ function Register() {
     }
 
     // Add logic for handling registration (e.g., API call)
-    console.log('Register attempt:', { name, email, password });
+    console.log('Register attempt:', { name, username, password });
+
+    // const handleSubmit = async (e) => {
+      e.preventDefault();
+      setError('');  // Clear previous errors
+      
+      try {
+        const response = await fetch('https://backseatdriver-ie-api.onrender.com/register', {
+          // const response = await fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          // Assuming the token is returned as data.token
+          alert(data);
+          // if (data.token) {
+          //   alert('one');
+          //   // localStorage.setItem('token', data.token);  // Save token in sessionStorage
+          //   // navigate('/vehicles');  // Redirect to myVehicles
+          // } else {
+          //   alert('two');
+          //   setError('Authentication failed. No token returned.');
+          // }
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message || 'Login failed. Please check your credentials.');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('An error occurred. Please try again.');
+      }
+    // };
+  
 
     setValidated(true);
   };
@@ -32,16 +75,17 @@ function Register() {
           <Col md={6} lg={4}>
             <div className="register-form bg-light p-4 shadow-sm">
               <h2 className="text-center mb-4">Register</h2>
+              {error && <p className="text-danger text-center">{error}</p>}
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group controlId="formBasicName" className="mb-3">
-                  <Form.Label>Full Name</Form.Label>
-                  <Form.Control
+                  {/* <Form.Label>Full Name</Form.Label> */}
+                  {/* <Form.Control
                     type="text"
                     placeholder="Enter full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
-                  />
+                  /> */}
                   <Form.Control.Feedback type="invalid">
                     Please provide your full name.
                   </Form.Control.Feedback>
@@ -52,7 +96,7 @@ function Register() {
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
-                    value={email}
+                    value={username}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />

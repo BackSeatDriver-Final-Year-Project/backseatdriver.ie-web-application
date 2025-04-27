@@ -8,6 +8,7 @@ import { Chart } from "react-google-charts";
 import { FaTrash } from 'react-icons/fa';
 import Modal from 'react-bootstrap/Modal';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import L from 'leaflet';
 
 const handleDelete = (id) => {
   // Add confirmation if needed
@@ -19,6 +20,15 @@ const mapContainerStyle = {
   height: '100%',
 };
 
+const customIcon = new L.Icon({
+  iconUrl: 'https://cdn2.iconfinder.com/data/icons/app-user-interface-6/48/Flag-256.png', // Update this path
+  iconSize: [41, 41],  // Default Leaflet marker size
+  iconAnchor: [12, 41], // Center bottom point
+  popupAnchor: [1, -34],
+  // shadowUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // Optional
+  shadowSize: [41, 41],
+});
+
 const UsageEfficiency = () => {
   const { id } = useParams();
   const [journeyData, setJourneyData] = useState(null);
@@ -29,7 +39,61 @@ const UsageEfficiency = () => {
   const [selectedJourney, setSelectedJourney] = useState(null);
   const itemsPerPage = 5;
   const token = localStorage.getItem('token');
+  const [chatResponse, setChatResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const [speed, setSpeed] = useState('');
+  const [fuel, setFuel] = useState('');
+  const [braking, setBraking] = useState('');
+  const [acceleration, setAcceleration] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+
+  // Function to fetch ChatGPT response
+  // Function to fetch ChatGPT response
+  // Function to fetch AI actionables with the journeyData object
+  const getAIActionables = async () => {
+    setLoading(true);
+    try {
+      // Construct the message using the journeyData object
+      const userMessage = `
+        Given the following driving habits, provide actionable advice for improving driving efficiency and safety:
+        - Calender of when the user has driven: ${journeyInfoData.calendarHeatmap}
+        - total number of jourenys taken in car: ${journeyInfoData.totalJourneys[0].total_journeys} liters/100km
+        - total distance travelled in car: ${journeyInfoData.average_distance[0].total_distance_km}
+        - average duration of a journey taken in this car in minutes ${journeyInfoData.averageDurationMinutes[0].avg_duration_minutes}
+        - the grouped speeds at which the vehicle was traelling in ${journeySpeedometerData.speedClock}
+      `;
+      
+      // Send the data to the ChatGPT API
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer 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`, // Replace with your OpenAI API key
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            { role: 'system', content: "You're an AI advisor for a telematics service. Provide driving advice and actionables based on the user's individual journey data provided." },
+            { role: 'user', content: userMessage }
+          ],
+          temperature: 0.7,
+          max_tokens: 150,
+        }),
+      });
+
+      const data = await response.json();
+      const actionables = data.choices[0].message.content;
+
+      // Update state with AI response
+      setAiResponse(actionables);
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      setAiResponse("Sorry, there was an error fetching the AI response.");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     const fetchJourneyData = async () => {
       // try {
@@ -199,7 +263,9 @@ const UsageEfficiency = () => {
                 <Col>
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>TOTAL JOURNEYS</small><br />
-                    <h1>{journeyInfoData['totalJourneys'][0]['total_journeys'] ?? ''}</h1>
+                    {/* <h1>{journeyInfoData['totalJourneys'][0]['total_journeys'] ?? ''}</h1> */}
+                    <h1>{journeyInfoData?.totalJourneys?.[0]?.total_journeys ?? '0'}</h1>
+
                   </div>
                 </Col>
 
@@ -207,7 +273,9 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>TOTAL DISTANCE TRAVELLED (KM)</small><br />
-                    <h1>{journeyInfoData['average_distance'][0]['total_distance_km']}</h1>
+                    {/* <h1>{journeyInfoData['average_distance'][0]['total_distance_km']}</h1> */}
+                    <h1>{journeyInfoData?.average_distance?.[0]?.total_distance_km ?? '0'}</h1>
+
                   </div>
                 </Col>
               </Row>
@@ -225,7 +293,9 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>AVERAGE JOURNEY DURATION</small><br />
-                    <h1>{journeyInfoData['averageDurationMinutes'][0]['avg_duration_minutes'] ?? ''}</h1>
+                    {/* <h1>{journeyInfoData['averageDurationMinutes'][0]['avg_duration_minutes'] ?? ''}</h1> */}
+                    <h1>{journeyInfoData?.averageDurationMinutes?.[0]?.avg_duration_minutes ?? '0'}</h1>
+
                   </div>
                 </Col>
               </Row>
@@ -235,7 +305,9 @@ const UsageEfficiency = () => {
 
                   <div className="bg-white p-4 shadow-sm rounded">
                     <small>DAYS ACTIVE</small><br />
-                    <h1>{journeyInfoData['activeDays'][0]['active_days'] ?? ''}</h1>
+                    {/* <h1>{journeyInfoData['activeDays'][0]['active_days'] ?? ''}</h1> */}
+                    <h1>{journeyInfoData?.activeDays?.[0]?.active_days ?? '0'}</h1>
+
                   </div>
                 </Col>
 
@@ -245,7 +317,7 @@ const UsageEfficiency = () => {
             <Col>
               <Chart
                 chartType="PieChart"
-                data={journeySpeedometerData.speedClock}
+                data={journeySpeedometerData && journeySpeedometerData.speedClock ? journeySpeedometerData.speedClock : []}  // Defaulting to an empty array if speedClock is missing
                 options={{
                   title: "Travelling Speed",
                 }}
@@ -253,24 +325,27 @@ const UsageEfficiency = () => {
                 height={"300px"}
               />
 
+
+
               <div className="bg-white p-4 shadow-sm rounded">
                 <h4>Your Journeys</h4>
                 <ListGroup>
+
                   {currentItems.map((journey) => (
                     <ListGroup.Item key={journey.journey_id ?? ''}>
                       Journey from <strong>{journey.startAddress}</strong> to <strong>{journey.endAddress}</strong> <br />
                       Duration: {journey.journeyDuration ?? ''} <br />
-                      Date: <br />
+                      {/* Date: <br /> */}
 
                       {/* Delete Button */}
-                      <Button
+                      {/* <Button
                         variant="danger"
                         className="ms-2"
                         style={{ float: 'right' }}
                         onClick={() => handleDelete(journey.journey_id)}
                       >
                         <FaTrash />
-                      </Button>
+                      </Button> */}
 
                       {/* View Journey Button */}
                       <Button
@@ -350,40 +425,50 @@ const UsageEfficiency = () => {
             </Modal.Header>
             <Modal.Body>
 
-            {/* {JSON.stringify(journeyInfoData)}
-          
-          {JSON.stringify(journeyData)} */}
+              {selectedJourney && (
 
-          {/* {selectedJourney && (
+                <MapContainer
+                  center={selectedJourney['journey_dataset']['jounrey'][0]}
+                  zoom={20}
+                  style={{ height: '400px', width: '100%', marginTop: '20px' }}
+                >
+                  <TileLayer
+                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                    subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                    attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
+                  />
+                  <Polyline positions={selectedJourney['journey_dataset']['jounrey']} color="blue" />
 
-            <JourneyMap style={{ height: '90%' }} journey={[selectedJourney.journey_dataset.jounrey]} />
-          )} */}
+                  <Marker position={selectedJourney['journey_dataset']['jounrey'][0]} icon={customIcon}>
+                    <Popup>Start Point</Popup>
+                  </Marker>
 
+                  <Marker position={selectedJourney['journey_dataset']['jounrey'][selectedJourney['journey_dataset']['jounrey'].length - 1]} icon={customIcon}>
+                    <Popup>End Point</Popup>
+                  </Marker>
 
-            {selectedJourney && (
-                
-              <MapContainer
-                center={selectedJourney['journey_dataset']['jounrey'][0]}
-                zoom={20}
-                style={{ height: '400px', width: '100%', marginTop: '20px' }}
+                </MapContainer>
+              )}
+
+              <br/>
+              <br/>
+
+              {/* Button to trigger AI actionables */}
+              <button
+                onClick={getAIActionables}
+                disabled={loading}
+                className="btn btn-primary"
               >
-                <TileLayer
-                  url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
-                  attribution='&copy; <a href="https://www.google.com/permissions/geoguidelines/">Google Maps</a>'
-                />
-                <Polyline positions={selectedJourney['journey_dataset']['jounrey']} color="blue" />
+                {loading ? "Loading..." : "Get AI Actionables"}
+              </button>
 
-                {/* <Marker position={selectedJourney['journey_dataset']['jounrey'][0]} icon={customIcon}>
-                  <Popup>Start Point</Popup>
-                </Marker>
+              {/* Div to display AI response */}
+              <div id="aiResponse" className="mt-3">
+                {aiResponse && <p>{aiResponse}</p>}
+              </div>
 
-                <Marker position={selectedJourney['journey_dataset']['jounrey'][selectedJourney.length - 1]} icon={customIcon}>
-                  <Popup>End Point</Popup>
-                </Marker>  */}
-
-              </MapContainer>
-            )}
+              <br/>
+              <br/>
 
               {selectedJourney && (
                 <Table striped bordered hover>
@@ -429,12 +514,12 @@ const UsageEfficiency = () => {
 
                     <tr>
                       <td><strong>Fuel Usage</strong></td>
-                      <td>{JSON.stringify(selectedJourney['fuel_usage_dataset'][0])}</td>
+                      <td>{JSON.stringify(selectedJourney['fuel_usage_dataset'][0].fuelLevel)}</td>
                     </tr>
 
                     <tr>
                       <td><strong>Fuel Usage</strong></td>
-                      <td>{JSON.stringify(selectedJourney['fuel_usage_dataset'][selectedJourney['fuel_usage_dataset'].length - 1])}</td>
+                      <td>{JSON.stringify(selectedJourney['fuel_usage_dataset'][selectedJourney['fuel_usage_dataset'].length - 1]['fuelLevel'])}</td>
                     </tr>
 
 
@@ -442,11 +527,11 @@ const UsageEfficiency = () => {
                 </Table>
               )}
 
-              {selectedJourney && (
+              {/* {selectedJourney && (
                 <td>
-                  { JSON.stringify(selectedJourney['journey_dataset']['jounrey']) }
+                  {JSON.stringify(selectedJourney['journey_dataset']['jounrey'])}
                 </td>
-              )}
+              )} */}
 
               {selectedJourney != null &&
                 <><Chart
@@ -458,7 +543,6 @@ const UsageEfficiency = () => {
                   width={"600px"}
                   height={"300px"} /></>
               }
-
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleCloseModal}>
