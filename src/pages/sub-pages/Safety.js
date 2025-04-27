@@ -33,7 +33,7 @@ function Safety() {
     useEffect(() => {
         const fetchSafetyData = async () => {
             try {
-                const response = await fetch(`https://backseatdriver-ie-api.onrender.com/crash-data-summary/${id}`); // Replace with your API URL
+                const response = await fetch(`https://backseatdriver-ie-api.onrender.com/Vehicles/crash-data-summary/${id}`); // Replace with your API URL
                 const data = await response.json();
                 setSafetyData(data); // Store the API response in state
             } catch (error) {

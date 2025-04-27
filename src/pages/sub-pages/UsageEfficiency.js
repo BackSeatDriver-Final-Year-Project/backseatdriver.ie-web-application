@@ -149,7 +149,7 @@ const UsageEfficiency = () => {
 
     const fetchVehicleInfoData = async () => {
       try {
-        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicle-summary/${id}`, {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/summary/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -167,7 +167,7 @@ const UsageEfficiency = () => {
 
     const fetchVehicleSpeedometers = async () => {
       try {
-        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicle-speed-summary/${id}`, {
+        const response = await fetch(`https://backseatdriver-ie-api.onrender.com/vehicles/speed-summary/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
