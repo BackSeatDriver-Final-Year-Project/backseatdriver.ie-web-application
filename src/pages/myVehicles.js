@@ -30,7 +30,7 @@ function MyVehicles() {
     }
 
     try {
-      const response = await fetch('https://backseatdriver-ie-api.onrender.com/register-vehicle', {
+      const response = await fetch('https://backseatdriver-ie-api.onrender.com/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
