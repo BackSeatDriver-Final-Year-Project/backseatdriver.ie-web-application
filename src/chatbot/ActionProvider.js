@@ -7,7 +7,7 @@ class ActionProvider {
     this.apiEndpoint = "https://api.openai.com/v1/chat/completions";
     
     // You'll need to set your API key
-    this.apiKey = ""; // Replace with your actual API key
+    this.apiKey = "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"; // Replace with your actual API key
     
     // System prompt to guide ChatGPT's responses
     this.systemPrompt = "You're an AI advisor for a telematics service - keep all answers and conversation related to cars and data presented from here on out";

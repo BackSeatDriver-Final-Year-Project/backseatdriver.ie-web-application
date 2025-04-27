@@ -64,7 +64,7 @@ const UsageEfficiency = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer `, // Replace with your OpenAI API key
+          'Authorization': `Bearer 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`, // Replace with your OpenAI API key
         },
         body: JSON.stringify({
           model: 'gpt-3.5-turbo',
