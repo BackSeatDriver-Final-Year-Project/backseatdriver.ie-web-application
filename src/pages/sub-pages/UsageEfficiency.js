@@ -1,24 +1,13 @@
-import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button, Pagination } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Table, ListGroup, Button, Pagination } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
 import { Chart } from "react-google-charts";
-import { FaTrash } from 'react-icons/fa';
 import Modal from 'react-bootstrap/Modal';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
-
-const handleDelete = (id) => {
-  // Add confirmation if needed
-  // Then call your delete API or update state
-};
-
-const mapContainerStyle = {
-  width: '100%',
-  height: '100%',
-};
 
 const customIcon = new L.Icon({
   iconUrl: 'https://cdn2.iconfinder.com/data/icons/app-user-interface-6/48/Flag-256.png', // Update this path
@@ -58,7 +47,7 @@ const UsageEfficiency = () => {
         - average duration of a journey taken in this car in minutes ${journeyInfoData.averageDurationMinutes[0].avg_duration_minutes}
         - the grouped speeds at which the vehicle was traelling in ${journeySpeedometerData.speedClock}
       `;
-      
+
       // Send the data to the ChatGPT API
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -445,8 +434,8 @@ const UsageEfficiency = () => {
                 </MapContainer>
               )}
 
-              <br/>
-              <br/>
+              <br />
+              <br />
 
               {/* Button to trigger AI actionables */}
               <button
@@ -462,8 +451,8 @@ const UsageEfficiency = () => {
                 {aiResponse && <p>{aiResponse}</p>}
               </div>
 
-              <br/>
-              <br/>
+              <br />
+              <br />
 
               {selectedJourney && (
                 <Table striped bordered hover>

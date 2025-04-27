@@ -1,18 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { PieChart, Pie, Cell } from 'recharts';
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button, Pagination } from 'react-bootstrap';
-import Speedometer, {
-    Background,
-    Arc,
-    Needle,
-    Progress,
-    Marks,
-    Indicator,
-    DangerPath,
-} from 'react-speedometer';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
-import HeatmapLayer from "../../components/HeatMapLayer";
+import { Container, Row, Col } from 'react-bootstrap';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
 const customMarker = new L.Icon({
@@ -35,13 +25,6 @@ const customSevereMarker = new L.Icon({
 });
 
 function Safety() {
-    const heatmapPoints = [
-        [53.2707, -9.0568, 0.5], // latitude, longitude, intensity
-        [53.2717, -9.0565, 0.8],
-        [53.2720, -9.0570, 1.0],
-        // add more points here
-    ];
-
     // State for API data
     const [safetyData, setSafetyData] = useState(null);
     const { id } = useParams();
@@ -64,38 +47,32 @@ function Safety() {
     // Mock data for the dashboard
     const [safetyScore] = useState(86);
 
-    const [trips] = useState([
-        { date: 'Apr 24, 2025', description: 'Work Commute', distance: '18.3 km', safety: 'Safe', safetyColor: '#27ae60' },
-        { date: 'Apr 23, 2025', description: 'Shopping Trip', distance: '7.2 km', safety: 'Fair', safetyColor: '#f1c40f' },
-        { date: 'Apr 22, 2025', description: 'Airport Run', distance: '42.7 km', safety: 'Safe', safetyColor: '#27ae60' }
-    ]);
-
     // Risk metrics are now set after safetyData is fetched
     const [riskMetrics, setRiskMetrics] = useState([]);
 
     useEffect(() => {
         if (safetyData) {
             const metrics = [
-                { 
-                  name: 'Hard Braking', 
-                  incidents: safetyData?.crashData?.total_hard_braking_events ?? 0, 
-                  level: (safetyData?.crashData?.total_hard_braking_events ?? 0) + 20, 
-                  color: '#e74c3c' 
+                {
+                    name: 'Hard Braking',
+                    incidents: safetyData?.crashData?.total_hard_braking_events ?? 0,
+                    level: (safetyData?.crashData?.total_hard_braking_events ?? 0) + 20,
+                    color: '#e74c3c'
                 },
-                { 
-                  name: 'Speeding', 
-                  incidents: safetyData?.crashData?.total_speeding_events ?? 0, 
-                  level: (safetyData?.crashData?.total_speeding_events ?? 0) + 20, 
-                  color: '#f1c40f' 
+                {
+                    name: 'Speeding',
+                    incidents: safetyData?.crashData?.total_speeding_events ?? 0,
+                    level: (safetyData?.crashData?.total_speeding_events ?? 0) + 20,
+                    color: '#f1c40f'
                 },
-                { 
-                  name: 'Acceleration', 
-                  incidents: safetyData?.crashData?.total_hard_acceleration_events ?? 0, 
-                  level: (safetyData?.crashData?.total_hard_acceleration_events ?? 0) + 20, 
-                  color: '#27ae60' 
+                {
+                    name: 'Acceleration',
+                    incidents: safetyData?.crashData?.total_hard_acceleration_events ?? 0,
+                    level: (safetyData?.crashData?.total_hard_acceleration_events ?? 0) + 20,
+                    color: '#27ae60'
                 }
-              ]
-              ;
+            ]
+                ;
             setRiskMetrics(metrics);
         }
     }, [safetyData]); // This effect runs every time safetyData is updated
@@ -112,6 +89,7 @@ function Safety() {
     ];
 
     const COLORS = ['#27ae60', '#ecf0f1'];
+    const GAUGE_COLORS = ['#e74c3c', '#f1c40f', '#27ae60'];
 
     // Gauge chart data for risk metrics
     const gaugeData = [
@@ -119,8 +97,6 @@ function Safety() {
         { name: 'Warning', value: 33 },
         { name: 'Safe', value: 34 }
     ];
-
-    const GAUGE_COLORS = ['#e74c3c', '#f1c40f', '#27ae60'];
 
     // Needle component for gauge charts
     const GaugeNeedle = ({ cx, cy, value, length }) => {

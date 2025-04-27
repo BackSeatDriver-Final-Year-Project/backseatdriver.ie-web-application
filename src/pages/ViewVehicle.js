@@ -1,30 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import CalendarHeatmap from 'react-calendar-heatmap';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/common/sidebar';
-import { Container, Row, Col, Table, Badge, ProgressBar, Card, ListGroup, Form, Button, Pagination } from 'react-bootstrap';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import { Container } from 'react-bootstrap';
 import 'leaflet/dist/leaflet.css';
 import { io } from 'socket.io-client';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import L from 'leaflet';
-import Modal from 'react-bootstrap/Modal';
-import { Chart } from "react-google-charts";
 import ChatbotWidget from "../chatbot/chatbot";
-import Speedometer, {
-  Background,
-  Arc,
-  Needle,
-  Progress,
-  Marks,
-  Indicator,
-  DangerPath,
-} from 'react-speedometer';
-import { FaTrash } from 'react-icons/fa';
-import HeatmapLayer from "../components/HeatMapLayer";
-
 import UsageEfficiency from './sub-pages/UsageEfficiency';
 import Wiki from './sub-pages/Wiki';
 import Safety from './sub-pages/Safety';
@@ -51,15 +32,7 @@ const center = {
   lng: -9.0568,
 };
 
-const today = new Date();
 
-const handleDelete = (id) => {
-  // Add confirmation if needed
-  // Then call your delete API or update state
-};
-
-// Cache to avoid repeated API calls
-const addressCache = {};
 
 const reverseGeocode = async (lat, lon) => {
   try {
@@ -73,28 +46,6 @@ const reverseGeocode = async (lat, lon) => {
     return `${lat}, ${lon}`;
   }
 };
-
-function shiftDate(date, numDays) {
-  const newDate = new Date(date);
-  newDate.setDate(newDate.getDate() + numDays);
-  return newDate;
-}
-
-function getRange(count) {
-  return Array.from({ length: count }, (_, i) => i);
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const randomValues = getRange(200).map(index => {
-  return {
-    date: shiftDate(today, -index),
-    count: getRandomInt(1, 3),
-  };
-});
-
 
 const fetchAddress = async (lat, lon) => {
   try {
@@ -111,7 +62,6 @@ const fetchAddress = async (lat, lon) => {
 };
 
 
-
 function ViewVehicle() {
   const [activeView, setActiveView] = useState('vehicleProfile');
 
@@ -121,7 +71,6 @@ function ViewVehicle() {
         return <VehicleProfile />;
       case 'usageEfficiency':
         return <UsageEfficiency />; //usage={usageData} />;
-      // return <VehicleProfile vehicle={vehicleData} />;
       case 'safety':
         return <Safety />;
         return <VehicleProfile />;

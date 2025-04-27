@@ -1,17 +1,6 @@
 import React from 'react';
-import { Button, Container, Form, Nav, Navbar } from 'react-bootstrap'; // Simplified imports
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Import Link for routing
-import {
-  MDBFooter,
-  MDBContainer,
-  MDBIcon,
-  MDBInput,
-  MDBCol,
-  MDBRow,
-  MDBBtn
-} from 'mdb-react-ui-kit';
-import logo from '../../images/BackSeatDriverLogo.png';
-import { Radius } from 'lucide-react';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap'; // Simplified imports
+import { Link } from 'react-router-dom'; // Import Link for routingf
 
 function Header() {
 
@@ -19,13 +8,7 @@ function Header() {
     <Container>
       {/* Logo */}
       <Navbar.Brand href="/">
-        {/* <img
-          src={logo} // Replace with your logo image path
-          height="50"
-          // alt="Logo"
-        /> */}
         {<img src="https://github.com/BackSeatDriver-Final-Year-Project/.github/blob/main/BackSeatDriverLogo.bb0f13939ee94e83aaf7.png?raw=true" height="50px"/>}
-        {/* <MDBIcon fas icon="bold" /> */}
       </Navbar.Brand>
 
       {/* Toggle for mobile view */}
