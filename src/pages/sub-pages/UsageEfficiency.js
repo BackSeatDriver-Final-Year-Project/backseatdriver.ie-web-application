@@ -39,13 +39,8 @@ const UsageEfficiency = () => {
   const [selectedJourney, setSelectedJourney] = useState(null);
   const itemsPerPage = 5;
   const token = localStorage.getItem('token');
-  const [chatResponse, setChatResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [speed, setSpeed] = useState('');
-  const [fuel, setFuel] = useState('');
-  const [braking, setBraking] = useState('');
-  const [acceleration, setAcceleration] = useState('');
   const [aiResponse, setAiResponse] = useState('');
 
   // Function to fetch ChatGPT response

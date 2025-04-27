@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import './Register.css'; // You can create this CSS file to style the register page
+import '../styling/Register.css'; // You can create this CSS file to style the register page
 import { useNavigate } from 'react-router-dom';  // Import the navigation hook for redirection
 
 function Register() {
@@ -24,52 +24,39 @@ function Register() {
     // Add logic for handling registration (e.g., API call)
     console.log('Register attempt:', { name, username, password });
 
-    // const handleSubmit = async (e) => {
-      e.preventDefault();
-      setError('');  // Clear previous errors
-      
-      try {
-        const response = await fetch('https://backseatdriver-ie-api.onrender.com/register', {
-          // const response = await fetch('http://localhost:3000/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          // Assuming the token is returned as data.token
-          alert(data);
-          // if (data.token) {
-          //   alert('one');
-          //   // localStorage.setItem('token', data.token);  // Save token in sessionStorage
-          //   // navigate('/vehicles');  // Redirect to myVehicles
-          // } else {
-          //   alert('two');
-          //   setError('Authentication failed. No token returned.');
-          // }
-        } else {
-          const errorData = await response.json();
-          setError(errorData.message || 'Login failed. Please check your credentials.');
-        }
-      } catch (error) {
-        console.error('Error during login:', error);
-        setError('An error occurred. Please try again.');
-      }
-    // };
-  
+    e.preventDefault();
+    setError('');  // Clear previous errors
 
+    try {
+      const response = await fetch('https://backseatdriver-ie-api.onrender.com/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Assuming the token is returned as data.token
+        alert(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setError('An error occurred. Please try again.');
+    }
     setValidated(true);
   };
 
   return (
     <div className="login-page">
-      <br/><br/>
+      <br /><br />
       <Container className="d-flex align-items-center justify-content-center h-100">
         <Row className="w-100 justify-content-center">
           <Col md={6} lg={4}>
@@ -78,14 +65,6 @@ function Register() {
               {error && <p className="text-danger text-center">{error}</p>}
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group controlId="formBasicName" className="mb-3">
-                  {/* <Form.Label>Full Name</Form.Label> */}
-                  {/* <Form.Control
-                    type="text"
-                    placeholder="Enter full name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  /> */}
                   <Form.Control.Feedback type="invalid">
                     Please provide your full name.
                   </Form.Control.Feedback>
@@ -141,7 +120,7 @@ function Register() {
           </Col>
         </Row>
       </Container>
-      <br/><br/>
+      <br /><br />
     </div>
   );
 }

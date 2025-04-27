@@ -137,11 +137,11 @@ function MyVehicles() {
                   <FaTruck size={20} style={{ marginBottom: '5px', color: 'black' }} />
                   <Card.Title style={{ color: 'black' }}>{vehicle.vehicle_id || vehicle._id || vehicle.id}</Card.Title>
                   <Card.Title style={{ color: 'black' }}>{vehicle.name}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">Last login: {vehicle.lastLogin}</Card.Subtitle>
+                  {/* <Card.Subtitle className="mb-2 text-muted">Last login: {vehicle.lastLogin}</Card.Subtitle> */}
                   <Button
                     variant="link"
                     onClick={() => handleViewVehicle(vehicle.unique_id || vehicle._id || vehicle.id)}
-                    style={{ padding: 0 }}
+                    style={{ color: 'blue', padding: 0 }}
                   >
                     Access Vehicle Data
                   </Button>
@@ -157,7 +157,8 @@ function MyVehicles() {
               <Button
                 variant="link"
                 onClick={handleShow}
-                style={{ padding: 0, color: 'white' }}
+                className="white-button"
+                style={{ padding: 0, color: 'white!important' }}
               >
                 + Create new Vehicle Profile
               </Button>

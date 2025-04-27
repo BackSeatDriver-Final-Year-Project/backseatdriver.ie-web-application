@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import './styling/sidebar.css';
+import '../styling/sidebar.css';
 import { MDBIcon } from 'mdb-react-ui-kit';
+
+/*
+  Sidebar component for Dashboard */
 
 const Sidebar = ({ setActiveView }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -14,7 +17,7 @@ const Sidebar = ({ setActiveView }) => {
   const backToList = () => {
     window.location.href = '/vehicles';
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
@@ -76,19 +79,18 @@ const Sidebar = ({ setActiveView }) => {
           </button>
         </li>
 
-        {/* http://localhost:3000/vehicles */}
-        
-        <button className="btn mt-3" style={{color: "white",background: "linear-gradient(0deg, #ff6600, #ffcc66)", width: "85%", bottom: "52px", position: "absolute", margin: "5px"}} onClick={backToList}>
+
+        <button className="btn mt-3" style={{ color: "white", background: "linear-gradient(0deg, #ff6600, #ffcc66)", width: "85%", bottom: "52px", position: "absolute", margin: "5px" }} onClick={backToList}>
           <MDBIcon fas icon="caret-left" />
           {isHovered && <small>View another vehicle</small>}
         </button>
 
-        <button className="btn mt-3" style={{color: "white",background: "linear-gradient(0deg, #8b0000, #ff4d4d)", width: "85%", bottom: "10px", position: "absolute", margin: "5px"}} onClick={handleLogout}>
+        <button className="btn mt-3" style={{ color: "white", background: "linear-gradient(0deg, #8b0000, #ff4d4d)", width: "85%", bottom: "10px", position: "absolute", margin: "5px" }} onClick={handleLogout}>
           <MDBIcon fas icon="sign-out-alt" />
           {isHovered && <small>Logout</small>}
         </button>
       </ul>
-      <div style={{padding:0}} className="sidebar-header border-bottom"></div>
+      <div style={{ padding: 0 }} className="sidebar-header border-bottom"></div>
     </div>
   );
 };

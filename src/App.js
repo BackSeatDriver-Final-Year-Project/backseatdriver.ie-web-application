@@ -1,15 +1,17 @@
-import React from 'react';
-import './App.css';
-import Header from './Header';
-import Footer from './Footer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
 
-import Login from './Login';
-import Register from './Register';
+// import style
+import './App.css';
+
+//import components
+import Header from './components/common/Header';
+import Footer from './components/common/Footer';
+import Login from './components/common/Login';
+import Register from './components/common/Register';
 import Vehicles from './pages/myVehicles';
 import ViewVehicle from './pages/ViewVehicle';
 import HomePage from './pages/HomePage';
-import Dashboard from './pages/vehicle';
 
 function MainLayout() {
   return (
@@ -36,7 +38,6 @@ function App() {
           {/* Full-screen route for Dashboard without header and footer */}
           <Route path="/vehicles" element={<Vehicles />} />
           <Route path="/vehicles/:id/dashboard" element={<ViewVehicle />} />
-          <Route path="/caolan" element={<Dashboard />} />
         </Routes>
       </Router>
     </div>
